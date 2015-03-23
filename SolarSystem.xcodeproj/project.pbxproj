@@ -1,0 +1,525 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7633D7DD1AB0C05700A51E68 /* Sun.png in Resources */ = {isa = PBXBuildFile; fileRef = 7633D7D81AB0C05700A51E68 /* Sun.png */; };
+		7633D7DF1AB0C05700A51E68 /* Venus.png in Resources */ = {isa = PBXBuildFile; fileRef = 7633D7DA1AB0C05700A51E68 /* Venus.png */; };
+		7633D7E01AB0C05700A51E68 /* Mercury.png in Resources */ = {isa = PBXBuildFile; fileRef = 7633D7DB1AB0C05700A51E68 /* Mercury.png */; };
+		7633D7E11AB0C05700A51E68 /* Mars.png in Resources */ = {isa = PBXBuildFile; fileRef = 7633D7DC1AB0C05700A51E68 /* Mars.png */; };
+		7633D7E31AB0C3DF00A51E68 /* Position.m in Sources */ = {isa = PBXBuildFile; fileRef = 7633D7E21AB0C3DF00A51E68 /* Position.m */; };
+		765F7F2C1AB0A327006D4689 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 765F7F2B1AB0A327006D4689 /* main.m */; };
+		765F7F2F1AB0A327006D4689 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 765F7F2E1AB0A327006D4689 /* AppDelegate.m */; };
+		765F7F321AB0A327006D4689 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 765F7F311AB0A327006D4689 /* ViewController.m */; };
+		765F7F351AB0A327006D4689 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 765F7F331AB0A327006D4689 /* Main.storyboard */; };
+		765F7F371AB0A327006D4689 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 765F7F361AB0A327006D4689 /* Images.xcassets */; };
+		765F7F3A1AB0A327006D4689 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 765F7F381AB0A327006D4689 /* LaunchScreen.xib */; };
+		765F7F461AB0A327006D4689 /* SolarSystemTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 765F7F451AB0A327006D4689 /* SolarSystemTests.m */; };
+		765F7F501AB0A3E6006D4689 /* PlanetModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 765F7F4F1AB0A3E6006D4689 /* PlanetModel.m */; };
+		765F7F541AB0A8F6006D4689 /* ImageTexture.m in Sources */ = {isa = PBXBuildFile; fileRef = 765F7F531AB0A8F6006D4689 /* ImageTexture.m */; };
+		765F7F561AB0AA5A006D4689 /* earth.png in Resources */ = {isa = PBXBuildFile; fileRef = 765F7F551AB0AA5A006D4689 /* earth.png */; };
+		765F7F5B1AB0ABEF006D4689 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 765F7F5A1AB0ABEF006D4689 /* OpenGLES.framework */; };
+		765F7F5D1AB0ABF8006D4689 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 765F7F5C1AB0ABF8006D4689 /* UIKit.framework */; };
+		765F7F5F1AB0ABFF006D4689 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 765F7F5E1AB0ABFF006D4689 /* GLKit.framework */; };
+		765F7F601AB0AC15006D4689 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 765F7F571AB0ABAA006D4689 /* CoreGraphics.framework */; };
+		765F7F621AB0AC20006D4689 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 765F7F611AB0AC20006D4689 /* Foundation.framework */; };
+		76BC09301ABF7F4A008F97BA /* Pluto.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 76BC092B1ABF7F4A008F97BA /* Pluto.jpg */; };
+		76BC09341ABF883E008F97BA /* OrbitTrail.m in Sources */ = {isa = PBXBuildFile; fileRef = 76BC09331ABF883E008F97BA /* OrbitTrail.m */; };
+		76BC09371ABF8C7D008F97BA /* Jupiter.png in Resources */ = {isa = PBXBuildFile; fileRef = 76BC09361ABF8C7D008F97BA /* Jupiter.png */; };
+		76BC093B1ABF8EF7008F97BA /* Neptune.png in Resources */ = {isa = PBXBuildFile; fileRef = 76BC09381ABF8EF7008F97BA /* Neptune.png */; };
+		76BC093C1ABF8EF7008F97BA /* Saturn.png in Resources */ = {isa = PBXBuildFile; fileRef = 76BC09391ABF8EF7008F97BA /* Saturn.png */; };
+		76BC093D1ABF8EF7008F97BA /* Uranus.png in Resources */ = {isa = PBXBuildFile; fileRef = 76BC093A1ABF8EF7008F97BA /* Uranus.png */; };
+		76BC093F1AC05203008F97BA /* Moon.png in Resources */ = {isa = PBXBuildFile; fileRef = 76BC093E1AC05203008F97BA /* Moon.png */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		765F7F401AB0A327006D4689 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 765F7F1E1AB0A327006D4689 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 765F7F251AB0A327006D4689;
+			remoteInfo = SolarSystem;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		7633D7D81AB0C05700A51E68 /* Sun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Sun.png; sourceTree = "<group>"; };
+		7633D7DA1AB0C05700A51E68 /* Venus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Venus.png; sourceTree = "<group>"; };
+		7633D7DB1AB0C05700A51E68 /* Mercury.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Mercury.png; sourceTree = "<group>"; };
+		7633D7DC1AB0C05700A51E68 /* Mars.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Mars.png; sourceTree = "<group>"; };
+		7633D7E21AB0C3DF00A51E68 /* Position.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Position.m; sourceTree = "<group>"; };
+		7633D7E41AB0C3ED00A51E68 /* Position.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Position.h; sourceTree = "<group>"; };
+		765F7F261AB0A327006D4689 /* SolarSystem.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SolarSystem.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		765F7F2A1AB0A327006D4689 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		765F7F2B1AB0A327006D4689 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		765F7F2D1AB0A327006D4689 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		765F7F2E1AB0A327006D4689 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		765F7F301AB0A327006D4689 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		765F7F311AB0A327006D4689 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		765F7F341AB0A327006D4689 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		765F7F361AB0A327006D4689 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		765F7F391AB0A327006D4689 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		765F7F3F1AB0A327006D4689 /* SolarSystemTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SolarSystemTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		765F7F441AB0A327006D4689 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		765F7F451AB0A327006D4689 /* SolarSystemTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SolarSystemTests.m; sourceTree = "<group>"; };
+		765F7F4F1AB0A3E6006D4689 /* PlanetModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlanetModel.m; sourceTree = "<group>"; };
+		765F7F511AB0A3F9006D4689 /* PlanetModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlanetModel.h; sourceTree = "<group>"; };
+		765F7F521AB0A8E5006D4689 /* ImageTexture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageTexture.h; sourceTree = "<group>"; };
+		765F7F531AB0A8F6006D4689 /* ImageTexture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageTexture.m; sourceTree = "<group>"; };
+		765F7F551AB0AA5A006D4689 /* earth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = earth.png; sourceTree = "<group>"; };
+		765F7F571AB0ABAA006D4689 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		765F7F5A1AB0ABEF006D4689 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		765F7F5C1AB0ABF8006D4689 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		765F7F5E1AB0ABFF006D4689 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		765F7F611AB0AC20006D4689 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		76BC092B1ABF7F4A008F97BA /* Pluto.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Pluto.jpg; sourceTree = "<group>"; };
+		76BC09331ABF883E008F97BA /* OrbitTrail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrbitTrail.m; sourceTree = "<group>"; };
+		76BC09351ABF8867008F97BA /* OrbitTrail.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OrbitTrail.h; sourceTree = "<group>"; };
+		76BC09361ABF8C7D008F97BA /* Jupiter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Jupiter.png; sourceTree = "<group>"; };
+		76BC09381ABF8EF7008F97BA /* Neptune.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Neptune.png; sourceTree = "<group>"; };
+		76BC09391ABF8EF7008F97BA /* Saturn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Saturn.png; sourceTree = "<group>"; };
+		76BC093A1ABF8EF7008F97BA /* Uranus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Uranus.png; sourceTree = "<group>"; };
+		76BC093E1AC05203008F97BA /* Moon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Moon.png; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		765F7F231AB0A327006D4689 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				765F7F621AB0AC20006D4689 /* Foundation.framework in Frameworks */,
+				765F7F601AB0AC15006D4689 /* CoreGraphics.framework in Frameworks */,
+				765F7F5F1AB0ABFF006D4689 /* GLKit.framework in Frameworks */,
+				765F7F5D1AB0ABF8006D4689 /* UIKit.framework in Frameworks */,
+				765F7F5B1AB0ABEF006D4689 /* OpenGLES.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		765F7F3C1AB0A327006D4689 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		765F7F1D1AB0A327006D4689 = {
+			isa = PBXGroup;
+			children = (
+				765F7F281AB0A327006D4689 /* SolarSystem */,
+				765F7F421AB0A327006D4689 /* SolarSystemTests */,
+				765F7F271AB0A327006D4689 /* Products */,
+				765F7F591AB0ABB6006D4689 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		765F7F271AB0A327006D4689 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				765F7F261AB0A327006D4689 /* SolarSystem.app */,
+				765F7F3F1AB0A327006D4689 /* SolarSystemTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		765F7F281AB0A327006D4689 /* SolarSystem */ = {
+			isa = PBXGroup;
+			children = (
+				7633D7E21AB0C3DF00A51E68 /* Position.m */,
+				7633D7E41AB0C3ED00A51E68 /* Position.h */,
+				76BC09331ABF883E008F97BA /* OrbitTrail.m */,
+				76BC09351ABF8867008F97BA /* OrbitTrail.h */,
+				765F7F521AB0A8E5006D4689 /* ImageTexture.h */,
+				765F7F531AB0A8F6006D4689 /* ImageTexture.m */,
+				765F7F2D1AB0A327006D4689 /* AppDelegate.h */,
+				765F7F2E1AB0A327006D4689 /* AppDelegate.m */,
+				765F7F511AB0A3F9006D4689 /* PlanetModel.h */,
+				765F7F4F1AB0A3E6006D4689 /* PlanetModel.m */,
+				765F7F301AB0A327006D4689 /* ViewController.h */,
+				765F7F311AB0A327006D4689 /* ViewController.m */,
+				765F7F331AB0A327006D4689 /* Main.storyboard */,
+				765F7F361AB0A327006D4689 /* Images.xcassets */,
+				765F7F381AB0A327006D4689 /* LaunchScreen.xib */,
+				765F7F291AB0A327006D4689 /* Supporting Files */,
+			);
+			path = SolarSystem;
+			sourceTree = "<group>";
+		};
+		765F7F291AB0A327006D4689 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				76BC093E1AC05203008F97BA /* Moon.png */,
+				76BC09381ABF8EF7008F97BA /* Neptune.png */,
+				76BC09391ABF8EF7008F97BA /* Saturn.png */,
+				76BC093A1ABF8EF7008F97BA /* Uranus.png */,
+				76BC09361ABF8C7D008F97BA /* Jupiter.png */,
+				76BC092B1ABF7F4A008F97BA /* Pluto.jpg */,
+				7633D7D81AB0C05700A51E68 /* Sun.png */,
+				7633D7DA1AB0C05700A51E68 /* Venus.png */,
+				7633D7DB1AB0C05700A51E68 /* Mercury.png */,
+				7633D7DC1AB0C05700A51E68 /* Mars.png */,
+				765F7F551AB0AA5A006D4689 /* earth.png */,
+				765F7F2A1AB0A327006D4689 /* Info.plist */,
+				765F7F2B1AB0A327006D4689 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		765F7F421AB0A327006D4689 /* SolarSystemTests */ = {
+			isa = PBXGroup;
+			children = (
+				765F7F451AB0A327006D4689 /* SolarSystemTests.m */,
+				765F7F431AB0A327006D4689 /* Supporting Files */,
+			);
+			path = SolarSystemTests;
+			sourceTree = "<group>";
+		};
+		765F7F431AB0A327006D4689 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				765F7F441AB0A327006D4689 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		765F7F591AB0ABB6006D4689 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				765F7F611AB0AC20006D4689 /* Foundation.framework */,
+				765F7F5E1AB0ABFF006D4689 /* GLKit.framework */,
+				765F7F5C1AB0ABF8006D4689 /* UIKit.framework */,
+				765F7F5A1AB0ABEF006D4689 /* OpenGLES.framework */,
+				765F7F571AB0ABAA006D4689 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		765F7F251AB0A327006D4689 /* SolarSystem */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 765F7F491AB0A327006D4689 /* Build configuration list for PBXNativeTarget "SolarSystem" */;
+			buildPhases = (
+				765F7F221AB0A327006D4689 /* Sources */,
+				765F7F231AB0A327006D4689 /* Frameworks */,
+				765F7F241AB0A327006D4689 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SolarSystem;
+			productName = SolarSystem;
+			productReference = 765F7F261AB0A327006D4689 /* SolarSystem.app */;
+			productType = "com.apple.product-type.application";
+		};
+		765F7F3E1AB0A327006D4689 /* SolarSystemTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 765F7F4C1AB0A327006D4689 /* Build configuration list for PBXNativeTarget "SolarSystemTests" */;
+			buildPhases = (
+				765F7F3B1AB0A327006D4689 /* Sources */,
+				765F7F3C1AB0A327006D4689 /* Frameworks */,
+				765F7F3D1AB0A327006D4689 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				765F7F411AB0A327006D4689 /* PBXTargetDependency */,
+			);
+			name = SolarSystemTests;
+			productName = SolarSystemTests;
+			productReference = 765F7F3F1AB0A327006D4689 /* SolarSystemTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		765F7F1E1AB0A327006D4689 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Christopher Howse";
+				TargetAttributes = {
+					765F7F251AB0A327006D4689 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					765F7F3E1AB0A327006D4689 = {
+						CreatedOnToolsVersion = 6.1.1;
+						TestTargetID = 765F7F251AB0A327006D4689;
+					};
+				};
+			};
+			buildConfigurationList = 765F7F211AB0A327006D4689 /* Build configuration list for PBXProject "SolarSystem" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 765F7F1D1AB0A327006D4689;
+			productRefGroup = 765F7F271AB0A327006D4689 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				765F7F251AB0A327006D4689 /* SolarSystem */,
+				765F7F3E1AB0A327006D4689 /* SolarSystemTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		765F7F241AB0A327006D4689 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				76BC093B1ABF8EF7008F97BA /* Neptune.png in Resources */,
+				76BC09301ABF7F4A008F97BA /* Pluto.jpg in Resources */,
+				7633D7E11AB0C05700A51E68 /* Mars.png in Resources */,
+				7633D7DD1AB0C05700A51E68 /* Sun.png in Resources */,
+				765F7F561AB0AA5A006D4689 /* earth.png in Resources */,
+				765F7F351AB0A327006D4689 /* Main.storyboard in Resources */,
+				76BC093F1AC05203008F97BA /* Moon.png in Resources */,
+				7633D7DF1AB0C05700A51E68 /* Venus.png in Resources */,
+				76BC09371ABF8C7D008F97BA /* Jupiter.png in Resources */,
+				7633D7E01AB0C05700A51E68 /* Mercury.png in Resources */,
+				76BC093C1ABF8EF7008F97BA /* Saturn.png in Resources */,
+				76BC093D1ABF8EF7008F97BA /* Uranus.png in Resources */,
+				765F7F3A1AB0A327006D4689 /* LaunchScreen.xib in Resources */,
+				765F7F371AB0A327006D4689 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		765F7F3D1AB0A327006D4689 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		765F7F221AB0A327006D4689 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7633D7E31AB0C3DF00A51E68 /* Position.m in Sources */,
+				76BC09341ABF883E008F97BA /* OrbitTrail.m in Sources */,
+				765F7F321AB0A327006D4689 /* ViewController.m in Sources */,
+				765F7F501AB0A3E6006D4689 /* PlanetModel.m in Sources */,
+				765F7F541AB0A8F6006D4689 /* ImageTexture.m in Sources */,
+				765F7F2F1AB0A327006D4689 /* AppDelegate.m in Sources */,
+				765F7F2C1AB0A327006D4689 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		765F7F3B1AB0A327006D4689 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				765F7F461AB0A327006D4689 /* SolarSystemTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		765F7F411AB0A327006D4689 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 765F7F251AB0A327006D4689 /* SolarSystem */;
+			targetProxy = 765F7F401AB0A327006D4689 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		765F7F331AB0A327006D4689 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				765F7F341AB0A327006D4689 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		765F7F381AB0A327006D4689 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				765F7F391AB0A327006D4689 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		765F7F471AB0A327006D4689 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		765F7F481AB0A327006D4689 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		765F7F4A1AB0A327006D4689 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = SolarSystem/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		765F7F4B1AB0A327006D4689 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = SolarSystem/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		765F7F4D1AB0A327006D4689 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = SolarSystemTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SolarSystem.app/SolarSystem";
+			};
+			name = Debug;
+		};
+		765F7F4E1AB0A327006D4689 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = SolarSystemTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SolarSystem.app/SolarSystem";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		765F7F211AB0A327006D4689 /* Build configuration list for PBXProject "SolarSystem" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				765F7F471AB0A327006D4689 /* Debug */,
+				765F7F481AB0A327006D4689 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		765F7F491AB0A327006D4689 /* Build configuration list for PBXNativeTarget "SolarSystem" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				765F7F4A1AB0A327006D4689 /* Debug */,
+				765F7F4B1AB0A327006D4689 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		765F7F4C1AB0A327006D4689 /* Build configuration list for PBXNativeTarget "SolarSystemTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				765F7F4D1AB0A327006D4689 /* Debug */,
+				765F7F4E1AB0A327006D4689 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 765F7F1E1AB0A327006D4689 /* Project object */;
+}
