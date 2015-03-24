@@ -11,6 +11,7 @@
 
 @interface ViewController : GLKViewController
 
+- (IBAction)pinch:(UIPinchGestureRecognizer *)sender;
 
 @end
 
