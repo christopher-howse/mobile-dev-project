@@ -414,13 +414,17 @@
     else if (sender.state == UIGestureRecognizerStateChanged)
     {
         //once pinch starts changing if scale is less then zoom out else zoom in, only if not in zoomPlanet mode
-        if (_previousScale > sender.scale) {
-
+        if (_previousScale > sender.scale)
+        {
+            if (_scale+0.1*sender.velocity > 0)
+            {
+                _scale += 0.1*sender.velocity;
+            }
             
         }
         else
         {
-
+            _scale += 0.1*sender.velocity;
         }
         _previousScale = sender.scale;
     }
