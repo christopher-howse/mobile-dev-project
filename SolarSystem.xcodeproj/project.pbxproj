@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		16DB22A01AC0FAFF00D77DD9 /* DeviceMotion.m in Sources */ = {isa = PBXBuildFile; fileRef = 16DB229F1AC0FAFF00D77DD9 /* DeviceMotion.m */; };
 		7633D7DD1AB0C05700A51E68 /* Sun.png in Resources */ = {isa = PBXBuildFile; fileRef = 7633D7D81AB0C05700A51E68 /* Sun.png */; };
 		7633D7DF1AB0C05700A51E68 /* Venus.png in Resources */ = {isa = PBXBuildFile; fileRef = 7633D7DA1AB0C05700A51E68 /* Venus.png */; };
 		7633D7E01AB0C05700A51E68 /* Mercury.png in Resources */ = {isa = PBXBuildFile; fileRef = 7633D7DB1AB0C05700A51E68 /* Mercury.png */; };
@@ -47,6 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		16DB229E1AC0FAFF00D77DD9 /* DeviceMotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceMotion.h; sourceTree = "<group>"; };
+		16DB229F1AC0FAFF00D77DD9 /* DeviceMotion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceMotion.m; sourceTree = "<group>"; };
 		7633D7D81AB0C05700A51E68 /* Sun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Sun.png; sourceTree = "<group>"; };
 		7633D7DA1AB0C05700A51E68 /* Venus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Venus.png; sourceTree = "<group>"; };
 		7633D7DB1AB0C05700A51E68 /* Mercury.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Mercury.png; sourceTree = "<group>"; };
@@ -147,6 +150,8 @@
 				765F7F361AB0A327006D4689 /* Images.xcassets */,
 				765F7F381AB0A327006D4689 /* LaunchScreen.xib */,
 				765F7F291AB0A327006D4689 /* Supporting Files */,
+				16DB229E1AC0FAFF00D77DD9 /* DeviceMotion.h */,
+				16DB229F1AC0FAFF00D77DD9 /* DeviceMotion.m */,
 			);
 			path = SolarSystem;
 			sourceTree = "<group>";
@@ -318,6 +323,7 @@
 				765F7F541AB0A8F6006D4689 /* ImageTexture.m in Sources */,
 				765F7F2F1AB0A327006D4689 /* AppDelegate.m in Sources */,
 				765F7F2C1AB0A327006D4689 /* main.m in Sources */,
+				16DB22A01AC0FAFF00D77DD9 /* DeviceMotion.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,6 +446,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = SolarSystem/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -450,6 +457,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = SolarSystem/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
