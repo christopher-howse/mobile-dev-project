@@ -29,6 +29,8 @@
 
 @implementation DeviceMotion
 
+@synthesize motman, timer;
+
 - (DeviceMotion*) initWithController:(ViewController *)controller
 {
     self = [super init];
@@ -44,7 +46,7 @@
         NSLog(@"get a better phone as yours does not have a accelerometer or gyro...");
     }
     return self;
-
+    
 }
 
 - (void)startMonitoringMotion
@@ -72,23 +74,9 @@
     CMRotationRate rot = self.motman.gyroData.rotationRate;
     float x, y, z;
     [self addAcceleration:acc];
-    switch (_filterMode) {
-        case kFILTERMODENO:
-            x = acc.x;
-            y = acc.y;
-            z = acc.z;
-            break;
-        case kFILTERMODELOWPASS:
-            x = _avgX;
-            y = _avgY;
-            z = _avgZ;
-            break;
-        case kFILTERMODEHIGHPASS:
-            x = _varX;
-            y = _varY;
-            z = _varZ;
-            break;
-    }
+    x = _avgX;
+    y = _avgY;
+    z = _avgZ;
     [_controller updateCMDataWithX:x y:y z:z pitch:rot.x roll:rot.y yaw:rot.z];
 }
 
