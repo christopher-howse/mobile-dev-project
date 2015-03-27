@@ -13,6 +13,7 @@
 #import "ImageTexture.h"
 #import "Position.h"
 #import "OrbitTrail.h"
+#import "DeviceMotion.h"
 
 @interface ViewController ()
 {
@@ -24,6 +25,11 @@
     float _min;
     //the scale of the previous pinch movement, used to determine zoom in or out
     float _previousScale;
+    
+    //montion values
+    CGFloat _accX, _accY, _accZ;
+    double _rotPitch, _rotRoll, _rotYaw;
+    DeviceMotion* _CMData;
     
     //the position of the planet being followed
     Position *_trackedPosition;
@@ -129,6 +135,9 @@
     float earthDayPeriod = 1;
     
     [EAGLContext setCurrentContext:self.context];
+    
+    _CMData = [[DeviceMotion alloc] initWithController:self];
+    [_CMData startMonitoringMotion];
     
     _trackedPosition = [[Position alloc] init];
     
@@ -428,5 +437,15 @@
         }
         _previousScale = sender.scale;
     }
+}
+
+- (void) updateCMDataWithX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z pitch:(double)pitch roll:(double)roll yaw:(double)yaw
+{
+    _accX = x;
+    _accY = y;
+    _accZ = z;
+    _rotPitch = pitch;
+    _rotRoll = roll;
+    _rotYaw = yaw;
 }
 @end
