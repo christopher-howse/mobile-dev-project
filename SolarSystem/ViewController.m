@@ -22,6 +22,8 @@
     CGSize _size;
     //the min of the width and height of the screen
     float _min;
+    //the scale of the previous pinch movement, used to determine zoom in or out
+    float _previousScale;
     
     //the position of the planet being followed
     Position *_trackedPosition;
@@ -488,4 +490,29 @@
     }
 }
 
+- (IBAction)pinch:(UIPinchGestureRecognizer *)sender
+{
+    //if pinch has just began set comparitor previous scale
+    if (sender.state == UIGestureRecognizerStateBegan)
+    {
+        _previousScale = sender.scale;
+    }
+    else if (sender.state == UIGestureRecognizerStateChanged)
+    {
+        //once pinch starts changing if scale is less then zoom out else zoom in, only if not in zoomPlanet mode
+        if (_previousScale > sender.scale)
+        {
+            if (_scale+0.1*sender.velocity > 0)
+            {
+                _scale += 0.1*sender.velocity;
+            }
+            
+        }
+        else
+        {
+            _scale += 0.1*sender.velocity;
+        }
+        _previousScale = sender.scale;
+    }
+}
 @end
