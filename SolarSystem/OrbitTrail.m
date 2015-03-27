@@ -16,17 +16,24 @@
     
     GLfloat *_vertices;
     GLfloat *_colors;
+    Position *_relativePosition;
 }
 @end
 
 @implementation OrbitTrail
 
--(OrbitTrail*) initWithSections:(int)sections amplitude:(float)amplitude
+-(OrbitTrail*) initWithSections:(int)sections amplitude:(float)amplitude relativePosition:(Position*) relativePosition
 {
     self = [super init];
     
     if(self)
     {
+        _relativePosition = relativePosition;
+        //find the relative offsets based on the object's object of gravitational pull
+        NSArray* relativeLocation = [_relativePosition currentLocation];
+        float relativeX = [[relativeLocation objectAtIndex:0] floatValue];
+        float relativeY = [[relativeLocation objectAtIndex:1] floatValue];
+        
         _numSeg = sections;
         _amplitude = amplitude;
         
@@ -35,8 +42,8 @@
         
         for(int i=0; i<sections*3; i+=3)
         {
-            _vertices[i] = cos(2*M_PI*i/(3*sections));
-            _vertices[i+1] = sin(2*M_PI*i/(3*sections));
+            _vertices[i] = _amplitude * cos(2*M_PI*i/(3*sections)) + relativeX;
+            _vertices[i+1] = _amplitude * sin(2*M_PI*i/(3*sections)) + relativeY;
             _vertices[i+2] = 0;
         }
         
@@ -57,6 +64,21 @@
     free(_vertices);
 }
 
+-(void)updateVerticesWithScale:(float)scale xTrans:(float)xTrans yTrans:(float)yTrans
+{
+    //find the relative offsets based on the object's object of gravitational pull
+    NSArray* relativeLocation = [_relativePosition currentLocation];
+    float relativeX = [[relativeLocation objectAtIndex:0] floatValue];
+    float relativeY = [[relativeLocation objectAtIndex:1] floatValue];
+    
+    for(int i=0; i<_numSeg*3; i+=3)
+    {
+        _vertices[i] = ((_amplitude*scale) * cos(2*M_PI*i/(3*_numSeg))) + xTrans + relativeX;
+        _vertices[i+1] = ((_amplitude*scale) * sin(2*M_PI*i/(3*_numSeg))) + yTrans + relativeY;
+        //maybe need third for skewing
+    }
+}
+
 -(void)drawOpenGLES1
 {
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -67,7 +89,7 @@
     glVertexPointer(3, GL_FLOAT, 0, _vertices);
     glNormalPointer(GL_FLOAT, 0, _vertices);
     glColorPointer(4, GL_FLOAT, 0, _colors);
-    glLineWidth(8);
+    glLineWidth(5);
     
     glDrawArrays(GL_LINE_LOOP, 0, _numSeg);
     

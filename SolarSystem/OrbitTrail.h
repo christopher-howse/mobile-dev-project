@@ -14,11 +14,13 @@
 
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES2/glext.h>
+#import "Position.h"
 
 @interface OrbitTrail : NSObject
 
--(OrbitTrail*) initWithSections:(int)sections amplitude:(float) amplitude;
+-(OrbitTrail*) initWithSections:(int)sections amplitude:(float)amplitude relativePosition:(Position*) relativePosition;
 -(void) dealloc;
--(void) drawOpenGLES1;
+-(void)updateVerticesWithScale:(float)scale xTrans:(float)xTrans yTrans:(float)yTrans;
+-(void)drawOpenGLES1;
 
 @end

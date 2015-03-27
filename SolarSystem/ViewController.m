@@ -28,7 +28,7 @@
     //whether or not we are following a planet
     Boolean _trackingPlanet;
     
-    OrbitTrail *_earthOrbit;
+    OrbitTrail *_earthOrbit, *_moonOrbit, *_marsOrbit, *_venusOrbit, *_mercuryOrbit, *_jupiterOrbit, *_saturnOrbit, *_uranusOrbit, *_neptuneOrbit, *_plutoOrbit;
     
     //the planet models
     PlanetModel *_earthModel, *_moonModel, *_sunModel, *_marsModel, *_venusModel, *_mercuryModel;
@@ -150,37 +150,46 @@
     //Initialize the models and textures of each planet with it's image and position
     _earthModel = [[PlanetModel alloc] initWithSections:16 position:earthPosition];
     _earthTexture = [[ImageTexture alloc] initFrom:@"earth.png"];
-    _earthOrbit = [[OrbitTrail alloc] initWithSections:32 amplitude:astronomicalUnit];
+    _earthOrbit = [[OrbitTrail alloc] initWithSections:64 amplitude:astronomicalUnit relativePosition:sunPosition];
     
     _moonModel = [[PlanetModel alloc] initWithSections:16 position:moonPosition];
     _moonTexture = [[ImageTexture alloc] initFrom:@"Moon.png"];
+    _moonOrbit = [[OrbitTrail alloc] initWithSections:64 amplitude:0.15 relativePosition:earthPosition];
     
     _sunModel = [[PlanetModel alloc] initWithSections:16 position:sunPosition];
     _sunTexture = [[ImageTexture alloc] initFrom:@"Sun.png"];
     
     _marsModel = [[PlanetModel alloc] initWithSections:16 position:marsPosition];
     _marsTexture = [[ImageTexture alloc] initFrom:@"Mars.png"];
+    _marsOrbit = [[OrbitTrail alloc] initWithSections:64 amplitude:1.524*astronomicalUnit relativePosition:sunPosition];
     
     _mercuryModel = [[PlanetModel alloc] initWithSections:16 position:mercuryPosition];
     _mercuryTexture = [[ImageTexture alloc] initFrom:@"Mercury.png"];
+    _mercuryOrbit = [[OrbitTrail alloc] initWithSections:64 amplitude:0.387*astronomicalUnit relativePosition:sunPosition];
     
     _venusModel = [[PlanetModel alloc] initWithSections:16 position:venusPosition];
     _venusTexture = [[ImageTexture alloc] initFrom:@"Venus.png"];
+    _venusOrbit = [[OrbitTrail alloc] initWithSections:64 amplitude:0.723*astronomicalUnit relativePosition:sunPosition];
     
     _jupiterModel = [[PlanetModel alloc] initWithSections:16 position:jupiterPosition];
     _jupiterTexture = [[ImageTexture alloc] initFrom:@"Jupiter.png"];
+    _jupiterOrbit = [[OrbitTrail alloc] initWithSections:64 amplitude:5.2*astronomicalUnit relativePosition:sunPosition];
     
     _saturnModel = [[PlanetModel alloc] initWithSections:16 position:saturnPosition];
     _saturnTexture = [[ImageTexture alloc] initFrom:@"Saturn.png"];
+    _saturnOrbit = [[OrbitTrail alloc] initWithSections:64 amplitude:9.58*astronomicalUnit relativePosition:sunPosition];
     
     _uranusModel = [[PlanetModel alloc] initWithSections:16 position:uranusPosition];
     _uranusTexture = [[ImageTexture alloc] initFrom:@"Uranus.png"];
+    _uranusOrbit = [[OrbitTrail alloc] initWithSections:64 amplitude:19.2*astronomicalUnit relativePosition:sunPosition];
     
     _neptuneModel = [[PlanetModel alloc] initWithSections:16 position:neptunePosition];
     _neptuneTexture = [[ImageTexture alloc] initFrom:@"Neptune.jpg"];
+    _neptuneOrbit = [[OrbitTrail alloc] initWithSections:64 amplitude:30.1*astronomicalUnit relativePosition:sunPosition];
     
     _plutoModel = [[PlanetModel alloc] initWithSections:16 position:plutoPosition];
     _plutoTexture = [[ImageTexture alloc] initFrom:@"Pluto.jpg"];
+    _plutoOrbit = [[OrbitTrail alloc] initWithSections:64 amplitude:39.5*astronomicalUnit relativePosition:sunPosition];
     
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
@@ -324,9 +333,57 @@
     
     glPushMatrix();
     {
-        glTranslatef(xTrans, yTrans, 0);
-        glScalef(size, size, size);
+        [_earthOrbit updateVerticesWithScale:_scale xTrans:xTrans yTrans:yTrans];
         [_earthOrbit drawOpenGLES1];
+    }
+    glPopMatrix();
+    
+    glPushMatrix();
+    {
+        [_moonOrbit updateVerticesWithScale:_scale xTrans:xTrans yTrans:yTrans];
+        [_moonOrbit drawOpenGLES1];
+    }
+    glPopMatrix();
+    
+    glPushMatrix();
+    {
+        [_marsOrbit updateVerticesWithScale:_scale xTrans:xTrans yTrans:yTrans];
+        [_marsOrbit drawOpenGLES1];
+    }
+    glPopMatrix();
+    
+    glPushMatrix();
+    {
+        [_mercuryOrbit updateVerticesWithScale:_scale xTrans:xTrans yTrans:yTrans];
+        [_mercuryOrbit drawOpenGLES1];
+    }
+    glPopMatrix();
+    
+    glPushMatrix();
+    {
+        [_venusOrbit updateVerticesWithScale:_scale xTrans:xTrans yTrans:yTrans];
+        [_venusOrbit drawOpenGLES1];
+    }
+    glPopMatrix();
+    
+    glPushMatrix();
+    {
+        [_jupiterOrbit updateVerticesWithScale:_scale xTrans:xTrans yTrans:yTrans];
+        [_jupiterOrbit drawOpenGLES1];
+    }
+    glPopMatrix();
+    
+    glPushMatrix();
+    {
+        [_saturnOrbit updateVerticesWithScale:_scale xTrans:xTrans yTrans:yTrans];
+        [_saturnOrbit drawOpenGLES1];
+    }
+    glPopMatrix();
+    
+    glPushMatrix();
+    {
+        [_neptuneOrbit updateVerticesWithScale:_scale xTrans:xTrans yTrans:yTrans];
+        [_neptuneOrbit drawOpenGLES1];
     }
     glPopMatrix();
 }
@@ -392,11 +449,40 @@
             _trackedPosition = _venusModel.getPlanetPosition;
             _trackingPlanet = true;
         }
-        else if([_mercuryModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord
-                 ])
+        else if([_mercuryModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
             _scale = 5.5;
             _trackedPosition = _mercuryModel.getPlanetPosition;
+            _trackingPlanet = true;
+        }
+        else if([_jupiterModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
+        {
+            _scale = 5.5;
+            _trackedPosition = _jupiterModel.getPlanetPosition;
+            _trackingPlanet = true;
+        }
+        else if([_saturnModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
+        {
+            _scale = 5.5;
+            _trackedPosition = _saturnModel.getPlanetPosition;
+            _trackingPlanet = true;
+        }
+        else if([_neptuneModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
+        {
+            _scale = 5.5;
+            _trackedPosition = _neptuneModel.getPlanetPosition;
+            _trackingPlanet = true;
+        }
+        else if([_uranusModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
+        {
+            _scale = 5.5;
+            _trackedPosition = _uranusModel.getPlanetPosition;
+            _trackingPlanet = true;
+        }
+        else if([_plutoModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
+        {
+            _scale = 5.5;
+            _trackedPosition = _plutoModel.getPlanetPosition;
             _trackingPlanet = true;
         }
     }
