@@ -388,6 +388,21 @@
         [_neptuneOrbit drawOpenGLES1];
     }
     glPopMatrix();
+    
+    glPushMatrix();
+    {
+        [_uranusOrbit updateVerticesWithScale:_scale xTrans:xTrans yTrans:yTrans];
+        [_uranusOrbit drawOpenGLES1];
+    }
+    glPopMatrix();
+
+    glPushMatrix();
+    {
+        [_plutoOrbit updateVerticesWithScale:_scale xTrans:xTrans yTrans:yTrans];
+        [_plutoOrbit drawOpenGLES1];
+    }
+    glPopMatrix();
+
 }
 
 //updates the model's position, rotation, and texture
@@ -459,31 +474,31 @@
         }
         else if([_jupiterModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
-            _scale = 5.5;
+            _scale = 1;
             _trackedPosition = _jupiterModel.getPlanetPosition;
             _trackingPlanet = true;
         }
         else if([_saturnModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
-            _scale = 5.5;
+            _scale = 1;
             _trackedPosition = _saturnModel.getPlanetPosition;
             _trackingPlanet = true;
         }
         else if([_neptuneModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
-            _scale = 5.5;
+            _scale = 1.5;
             _trackedPosition = _neptuneModel.getPlanetPosition;
             _trackingPlanet = true;
         }
         else if([_uranusModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
-            _scale = 5.5;
+            _scale = 2;
             _trackedPosition = _uranusModel.getPlanetPosition;
             _trackingPlanet = true;
         }
         else if([_plutoModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
-            _scale = 5.5;
+            _scale = 8;
             _trackedPosition = _plutoModel.getPlanetPosition;
             _trackingPlanet = true;
         }
