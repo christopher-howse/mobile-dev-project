@@ -25,6 +25,14 @@
     float _min;
     //the scale of the previous pinch movement, used to determine zoom in or out
     float _previousScale;
+    float _initalScale;
+    //zoom level
+    int _zoomLvl;
+    NSMutableArray *_zoomValues;
+    
+    //translation offset
+    float _xOffset;
+    float _yOffset;
     
     //montion values
     CGFloat _accX, _accY, _accZ;
@@ -69,6 +77,9 @@
     GLKView *view = (GLKView *)self.view;
     view.context = self.context;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
+    
+    UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
+    [view addGestureRecognizer:pinchGesture];
     
     [self setupGL];
 }
@@ -135,6 +146,9 @@
     float earthDayPeriod = 1;
     
     [EAGLContext setCurrentContext:self.context];
+    
+    _zoomValues = [NSMutableArray arrayWithObjects: @"0.1",@"1",@"5",@"10", nil];
+    _zoomLvl = 1;
     
     _CMData = [[DeviceMotion alloc] initWithController:self];
     [_CMData startMonitoringMotion];
@@ -228,7 +242,7 @@
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
-    float scaleFactor = 0.1 * _scale;
+    float scaleFactor = 0.1 * [[_zoomValues objectAtIndex:_zoomLvl] doubleValue];
     NSArray* translation = _trackedPosition.currentLocation;
     float xTrans = -[[translation objectAtIndex:0] floatValue];//_moveDistance.x/100;
     float yTrans = -[[translation objectAtIndex:1] floatValue];//-_moveDistance.y/100;
@@ -345,7 +359,7 @@
 //updates the model's position, rotation, and texture
 - (void) updateModel:(PlanetModel*) model texture:(ImageTexture*) texture size:(float) size xTrans:(float) xTrans yTrans:(float) yTrans
 {
-    NSArray* nextLocation = [model.getPlanetPosition nextLocationWithScale:_scale];
+    NSArray* nextLocation = [model.getPlanetPosition nextLocationWithScale:[[_zoomValues objectAtIndex:_zoomLvl] doubleValue]];
     float nextX = [[nextLocation objectAtIndex:0] floatValue];
     float nextY = [[nextLocation objectAtIndex:1] floatValue];
     glTranslatef(nextX + xTrans, nextY + yTrans, 0);
@@ -365,6 +379,8 @@
     {
         _trackingPlanet = false;
         _scale = 1;
+        [_zoomValues setObject:@"5" atIndexedSubscript:2];
+        _zoomLvl = 1;
         _trackedPosition = [[Position alloc] init];
     }
     else
@@ -382,24 +398,32 @@
         if([_earthModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
             _scale = 5;
+            [_zoomValues setObject:@"5" atIndexedSubscript:2];
+            _zoomLvl = 2;
             _trackedPosition = _earthModel.getPlanetPosition;
             _trackingPlanet = true;
         }
         else if([_moonModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
             _scale = 8;
+            [_zoomValues setObject:@"8" atIndexedSubscript:2];
+            _zoomLvl = 2;
             _trackedPosition = _moonModel.getPlanetPosition;
             _trackingPlanet = true;
         }
         else if([_marsModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
             _scale = 8;
+            [_zoomValues setObject:@"8" atIndexedSubscript:2];
+            _zoomLvl = 2;
             _trackedPosition = _marsModel.getPlanetPosition;
             _trackingPlanet = true;
         }
         else if([_venusModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
             _scale = 5;
+            [_zoomValues setObject:@"5" atIndexedSubscript:2];
+            _zoomLvl = 2;
             _trackedPosition = _venusModel.getPlanetPosition;
             _trackingPlanet = true;
         }
@@ -407,10 +431,17 @@
                  ])
         {
             _scale = 5.5;
+            [_zoomValues setObject:@"5.5" atIndexedSubscript:2];
+            _zoomLvl = 2;
             _trackedPosition = _mercuryModel.getPlanetPosition;
             _trackingPlanet = true;
         }
     }
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    
 }
 
 - (IBAction)pinch:(UIPinchGestureRecognizer *)sender
@@ -419,26 +450,85 @@
     if (sender.state == UIGestureRecognizerStateBegan)
     {
         _previousScale = sender.scale;
+        _initalScale = 0;
     }
     else if (sender.state == UIGestureRecognizerStateChanged)
     {
-        //once pinch starts changing if scale is less then zoom out else zoom in, only if not in zoomPlanet mode
-        if (_previousScale > sender.scale)
+                NSLog(@"pinching");
+        //once pinch starts changing if scale is less then zoom out else zoom in
+        if (_previousScale < sender.scale)
         {
-            if (_scale+0.1*sender.velocity > 0)
+            if (_zoomLvl < 3)
             {
-                _scale += 0.1*sender.velocity;
+                _initalScale += 1;
+                if( 30 < _initalScale)
+                {
+                    _zoomLvl += 1;
+                    _initalScale = 0;
+                }
             }
             
         }
+        //zoom in
         else
         {
-            _scale += 0.1*sender.velocity;
+            if (_zoomLvl > 0)
+            {
+                _initalScale -= 1;
+                if(-30 > _initalScale)
+                {
+                    _zoomLvl -= 1;
+                    _initalScale = 0;
+                }
+            }
         }
         _previousScale = sender.scale;
     }
 }
 
+
+-(void) handlePinch:(UIPinchGestureRecognizer *)gestureRecognizer {
+    //if pinch has just began set comparitor previous scale
+    if ([gestureRecognizer state] == UIGestureRecognizerStateBegan)
+    {
+        _previousScale = [gestureRecognizer scale];
+        _initalScale = 0;
+    }
+    else if ([gestureRecognizer state] == UIGestureRecognizerStateChanged)
+    {
+        NSLog(@"pinching");
+        //once pinch starts changing if scale is less then zoom out else zoom in
+        if (_previousScale < [gestureRecognizer scale])
+        {
+            if (_zoomLvl < 3)
+            {
+                _initalScale += [gestureRecognizer velocity];
+                NSLog(@"%f",_initalScale);
+                if( 40 < _initalScale)
+                {
+                    _zoomLvl += 1;
+                    _initalScale = 0;
+                }
+            }
+            
+        }
+        //zoom in
+        else
+        {
+            if (_zoomLvl > 0)
+            {
+                _initalScale += [gestureRecognizer velocity];
+                NSLog(@"%f",_initalScale);
+                if(-30 > _initalScale)
+                {
+                    _zoomLvl -= 1;
+                    _initalScale = 0;
+                }
+            }
+        }
+        _previousScale = [gestureRecognizer scale];
+    }
+}
 - (void) updateCMDataWithX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z pitch:(double)pitch roll:(double)roll yaw:(double)yaw
 {
     _accX = x;
