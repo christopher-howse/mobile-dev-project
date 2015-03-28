@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -16,8 +17,44 @@
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS" customClass="GLKView">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="CurrentDate" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lId-0a-8hA">
+                                <rect key="frame" x="16" y="559" width="287" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Jump to Date:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fuM-Fe-Xad">
+                                <rect key="frame" x="16" y="32" width="109" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="yyyy MMM dd" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4Rg-gr-PwS">
+                                <rect key="frame" x="133" y="28" width="451" height="30"/>
+                                <accessibility key="accessibilityConfiguration" hint="yyyy MMM dd" label="Jump to Date:"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="vXZ-lx-hvc" id="aOK-LQ-mWF"/>
+                                </connections>
+                            </textField>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="lId-0a-8hA" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="6Im-xc-KRM"/>
+                            <constraint firstItem="4Rg-gr-PwS" firstAttribute="leading" secondItem="fuM-Fe-Xad" secondAttribute="trailing" constant="8" id="V8H-lh-Bc2"/>
+                            <constraint firstItem="lId-0a-8hA" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="WHw-or-fW4"/>
+                            <constraint firstItem="fuM-Fe-Xad" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="fph-PO-rcB"/>
+                            <constraint firstItem="fuM-Fe-Xad" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="12" id="iRp-RG-rqD"/>
+                            <constraint firstItem="4Rg-gr-PwS" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="8" id="oew-TK-2uS"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="lId-0a-8hA" secondAttribute="bottom" constant="20" id="phr-rI-DXo"/>
+                            <constraint firstItem="4Rg-gr-PwS" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="wf6-UF-gEr"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="_currentDateLabel" destination="lId-0a-8hA" id="kah-th-bFX"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>

@@ -18,6 +18,7 @@
     float _dayPeriod; //the time it takes the object to rotate around it's central axis
     float _rotation; //the number of degrees the object has been rotated
     float _locFrameNum, _rotFrameNum; //values to track location and rotation progress
+    float _tiltSpeed; //rate at which time passes based on the tilt of the device
     Position *_relativePosition; //the position of the object's object of gravitational pull. ie. For the earth -> the sun, for the moon -> the earth
 }
 @end
@@ -25,7 +26,7 @@
 @implementation Position
 
 //Initialize for planet with known periods, amplitude, and relative position
--(Position*) initWithRelativePosition:(Position*) relativePosition yearPeriod:(float) yearPeriod amplitude: (float) amplitude dayPeriod: (float) dayPeriod;
+-(Position*) initWithRelativePosition:(Position*) relativePosition yearPeriod:(float) yearPeriod amplitude: (float) amplitude dayPeriod: (float) dayPeriod percentOribit:(float) percentOribit
 {
     //initialize with the default initializer first
     self = [self init];
@@ -41,9 +42,15 @@
         float relativeX = [[relativeLocation objectAtIndex:0] floatValue];
         float relativeY = [[relativeLocation objectAtIndex:1] floatValue];
         
+        //percentOrbit to radians
+        float radians = (percentOribit/100) * (2*M_PI);
+        
         //set the initial location
-        _x = (_amplitude * cos(0)) + relativeX;
-        _y = (_amplitude * sin(0)) + relativeY;
+        _x = (_amplitude * cos(radians)) + relativeX;
+        _y = (_amplitude * sin(radians)) + relativeY;
+        
+        //set locFrameNum based on radians
+        _locFrameNum = ((percentOribit/100) * _yearPeriod);
     }
     
     return self;
@@ -66,6 +73,7 @@
         _amplitude = 0;
         _dayPeriod = 0;
         _rotation = 0;
+        _tiltSpeed = 0.1;
         _relativePosition = nil;
     }
     
@@ -98,7 +106,7 @@
     _z = 0;
     
     //update the progression of the orbit
-    _locFrameNum += 0.08;
+    _locFrameNum += _tiltSpeed;
     
     //if the orbit has completed, reset
     //this avoids overflowing max float value (however unlikely)
@@ -118,7 +126,7 @@
     _rotation = (360 * _rotFrameNum) /_dayPeriod;
     
     //update the progression of the rotation
-    _rotFrameNum += 0.08;
+    _rotFrameNum += _tiltSpeed;
     
     //if the rotation has completed, reset
     //this avoids overflowing max float value
@@ -140,6 +148,19 @@
         return true;
     }
     else return false;
+}
+
+- (void) updateTiltSpeedWithSpeed:(float) speed
+{
+    _tiltSpeed = MAX(0.01, speed + 1);
+}
+
+- (void) addTimeDifference:(float) timeDifference
+{
+    _locFrameNum += timeDifference;
+    _locFrameNum = fmodf(_locFrameNum, _yearPeriod);
+    _rotFrameNum += timeDifference;
+    _rotFrameNum = fmodf(_rotFrameNum, _dayPeriod);
 }
 
 @end

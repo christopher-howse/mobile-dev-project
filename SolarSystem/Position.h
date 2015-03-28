@@ -18,7 +18,7 @@
 @interface Position : NSObject
 
 //Initialize for planet with known periods, amplitude, and relative position
--(Position*) initWithRelativePosition:(Position*) relativePosition yearPeriod:(float) yearPeriod amplitude: (float) amplitude dayPeriod: (float) dayPeriod;
+-(Position*) initWithRelativePosition:(Position*) relativePosition yearPeriod:(float) yearPeriod amplitude: (float) amplitude dayPeriod: (float) dayPeriod percentOribit:(float) percentOribit;
 
 //Default initiallizer
 - (Position*) init;
@@ -37,5 +37,9 @@
 
 //Checks if an opengl xy coordinate is near the position _x, _y within a certain tolerance
 - (Boolean) isNearbyX:(float) x Y:(float) y;
+
+- (void) updateTiltSpeedWithSpeed:(float) speed;
+
+- (void) addTimeDifference:(float) timeDifference;
 
 @end

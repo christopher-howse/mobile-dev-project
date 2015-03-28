@@ -14,6 +14,7 @@
 #import "Position.h"
 #import "OrbitTrail.h"
 #import "DeviceMotion.h"
+#import "StarDate.h"
 
 @interface ViewController ()
 {
@@ -30,6 +31,14 @@
     CGFloat _accX, _accY, _accZ;
     double _rotPitch, _rotRoll, _rotYaw;
     DeviceMotion* _CMData;
+    
+    //Star date
+    StarDate *_starDate;
+    
+    //Label IO
+    IBOutlet UILabel *_currentDateLabel;
+    //whether or not the date has been manually set
+    Boolean _dateUpdated;
     
     //the position of the planet being followed
     Position *_trackedPosition;
@@ -131,7 +140,7 @@
     float astronomicalUnit = 1 * astronomicalScaleFactor;
     
     //Reference frame for each planets year and day
-    float earthPeriod = 365;
+    float earthPeriod = 365.25636; //accounts for leap years etc
     float earthDayPeriod = 1;
     
     [EAGLContext setCurrentContext:self.context];
@@ -139,24 +148,27 @@
     _CMData = [[DeviceMotion alloc] initWithController:self];
     [_CMData startMonitoringMotion];
     
+    
+    _starDate = [[StarDate alloc] init];
+    
     _trackedPosition = [[Position alloc] init];
     
     //Initialize the positions of the planets relative to one another
     //year and day lengths set relative to earth
     //distance to sun set relative to earth's distance to the sun
-    Position* sunPosition = [[Position alloc] initWithRelativePosition:nil yearPeriod:0 amplitude:0 dayPeriod:25.379*earthDayPeriod];
-    Position* earthPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:earthPeriod amplitude:astronomicalUnit dayPeriod:0.9972*earthDayPeriod];
-    Position* moonPosition = [[Position alloc] initWithRelativePosition:earthPosition yearPeriod:0.0748*earthPeriod amplitude:0.15 dayPeriod:27.321*earthDayPeriod];
-    Position* marsPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:1.881*earthPeriod amplitude:1.524*astronomicalUnit dayPeriod:1.0259*earthDayPeriod];
-    Position* mercuryPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:0.240*earthPeriod amplitude:0.387*astronomicalUnit dayPeriod:58.649*earthDayPeriod];
-    Position* venusPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:0.615*earthPeriod amplitude:0.723*astronomicalUnit dayPeriod:243.019*earthDayPeriod];
+    Position* sunPosition = [[Position alloc] initWithRelativePosition:nil yearPeriod:0 amplitude:0 dayPeriod:25.379*earthDayPeriod percentOribit:0];
+    Position* earthPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:earthPeriod amplitude:astronomicalUnit dayPeriod:0.9972*earthDayPeriod percentOribit:0];
+    Position* moonPosition = [[Position alloc] initWithRelativePosition:earthPosition yearPeriod:0.0748*earthPeriod amplitude:0.15 dayPeriod:27.321*earthDayPeriod percentOribit:0];
+    Position* marsPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:1.881*earthPeriod amplitude:1.524*astronomicalUnit dayPeriod:1.0259*earthDayPeriod percentOribit:72.22];
+    Position* mercuryPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:0.240*earthPeriod amplitude:0.387*astronomicalUnit dayPeriod:58.649*earthDayPeriod percentOribit:41.94];
+    Position* venusPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:0.615*earthPeriod amplitude:0.723*astronomicalUnit dayPeriod:243.019*earthDayPeriod percentOribit:23.61];
     
     //Outer Planet Positions
-    Position* jupiterPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:11.9*earthPeriod amplitude:5.2*astronomicalUnit dayPeriod:0.41007*earthDayPeriod];
-    Position* saturnPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:29.7*earthPeriod amplitude:9.58*astronomicalUnit dayPeriod:0.426*earthDayPeriod];
-    Position* uranusPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:84.3*earthPeriod amplitude:19.2*astronomicalUnit dayPeriod:0.71833*earthDayPeriod];
-    Position* neptunePosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:164.8*earthPeriod amplitude:30.1*astronomicalUnit dayPeriod:0.67125*earthDayPeriod];
-    Position* plutoPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:247.68*earthPeriod amplitude:39.5*astronomicalUnit dayPeriod:6.38718*earthDayPeriod];
+    Position* jupiterPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:11.9*earthPeriod amplitude:5.2*astronomicalUnit dayPeriod:0.41007*earthDayPeriod percentOribit:82.5];
+    Position* saturnPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:29.7*earthPeriod amplitude:9.58*astronomicalUnit dayPeriod:0.426*earthDayPeriod percentOribit:85];
+    Position* uranusPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:84.3*earthPeriod amplitude:19.2*astronomicalUnit dayPeriod:0.71833*earthDayPeriod percentOribit:60.56];
+    Position* neptunePosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:164.8*earthPeriod amplitude:30.1*astronomicalUnit dayPeriod:0.67125*earthDayPeriod percentOribit:57.22];
+    Position* plutoPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:247.68*earthPeriod amplitude:39.5*astronomicalUnit dayPeriod:6.38718*earthDayPeriod percentOribit:41.94];
     
     //Initialize the models and textures of each planet with it's image and position
     _earthModel = [[PlanetModel alloc] initWithSections:16 position:earthPosition];
@@ -242,6 +254,18 @@
     float xTrans = -[[translation objectAtIndex:0] floatValue];//_moveDistance.x/100;
     float yTrans = -[[translation objectAtIndex:1] floatValue];//-_moveDistance.y/100;
     
+    //Update tilt speed from device rotation
+    float tilt = _accX;
+    //Update stardate based on tilt value;
+    [_starDate updateTimeWithTilt:tilt];
+    [self updateCurrentTimeLabel];
+    
+    if(_dateUpdated)
+    {
+        _dateUpdated = false;
+        [self jumpPlanetPositions];
+    }
+    
     GLfloat position[] = {xTrans,yTrans,0,1};
     glEnable(GL_LIGHTING);
     glLightfv(GL_LIGHT0, GL_POSITION, position);
@@ -258,6 +282,7 @@
     
     glPushMatrix();
     {
+        [_sunModel.getPlanetPosition updateTiltSpeedWithSpeed:tilt];
         float sunSize = 3.5 * scaleFactor;
         glTranslatef(xTrans, yTrans, 0);
         glScalef(sunSize, sunSize, sunSize);
@@ -275,70 +300,70 @@
         float earthSize = 1 * scaleFactor;
         GLfloat planetAmbience[] = {0.4,0.4,0.4};
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, planetAmbience);
-        [self updateModel:_earthModel texture:_earthTexture size:earthSize xTrans:xTrans yTrans:yTrans];
+        [self updateModel:_earthModel texture:_earthTexture size:earthSize xTrans:xTrans yTrans:yTrans tilt:tilt];
     }
     glPopMatrix();
     
     glPushMatrix();
     {
         float moonSize = 0.273 * scaleFactor;
-        [self updateModel:_moonModel texture:_moonTexture size:moonSize xTrans:xTrans yTrans:yTrans];
+        [self updateModel:_moonModel texture:_moonTexture size:moonSize xTrans:xTrans yTrans:yTrans tilt:tilt];
     }
     glPopMatrix();
     
     glPushMatrix();
     {
         float marsSize = 0.532 * scaleFactor;
-        [self updateModel:_marsModel texture:_marsTexture size:marsSize xTrans:xTrans yTrans:yTrans];
+        [self updateModel:_marsModel texture:_marsTexture size:marsSize xTrans:xTrans yTrans:yTrans tilt:tilt];
     }
     glPopMatrix();
     
     glPushMatrix();
     {
         float mercurySize = 0.383 * scaleFactor;
-        [self updateModel:_mercuryModel texture:_mercuryTexture size:mercurySize xTrans:xTrans yTrans:yTrans];
+        [self updateModel:_mercuryModel texture:_mercuryTexture size:mercurySize xTrans:xTrans yTrans:yTrans tilt:tilt];
     }
     glPopMatrix();
     
     glPushMatrix();
     {
         float venusSize = 0.95 * scaleFactor;
-        [self updateModel:_venusModel texture:_venusTexture size:venusSize xTrans:xTrans yTrans:yTrans];
+        [self updateModel:_venusModel texture:_venusTexture size:venusSize xTrans:xTrans yTrans:yTrans tilt:tilt];
     }
     glPopMatrix();
     
     glPushMatrix();
     {
         float jupiterSize = 10.97 * scaleFactor;
-        [self updateModel:_jupiterModel texture:_jupiterTexture size:jupiterSize xTrans:xTrans yTrans:yTrans];
+        [self updateModel:_jupiterModel texture:_jupiterTexture size:jupiterSize xTrans:xTrans yTrans:yTrans tilt:tilt];
     }
     glPopMatrix();
     
     glPushMatrix();
     {
         float saturnSize = 9.14 * scaleFactor;
-        [self updateModel:_saturnModel texture:_saturnTexture size:saturnSize xTrans:xTrans yTrans:yTrans];
+        [self updateModel:_saturnModel texture:_saturnTexture size:saturnSize xTrans:xTrans yTrans:yTrans tilt:tilt];
     }
     glPopMatrix();
     
     glPushMatrix();
     {
         float uranusSize = 3.98 * scaleFactor;
-        [self updateModel:_uranusModel texture:_uranusTexture size:uranusSize xTrans:xTrans yTrans:yTrans];
+        [self updateModel:_uranusModel texture:_uranusTexture size:uranusSize xTrans:xTrans yTrans:yTrans tilt:tilt];
     }
     glPopMatrix();
     
     glPushMatrix();
     {
         float neptuneSize = 3.86 * scaleFactor;
-        [self updateModel:_neptuneModel texture:_neptuneTexture size:neptuneSize xTrans:xTrans yTrans:yTrans];
+        [self updateModel:_neptuneModel texture:_neptuneTexture size:neptuneSize xTrans:xTrans yTrans:yTrans tilt:tilt];
     }
     glPopMatrix();
     
     glPushMatrix();
     {
         float plutoSize = 0.185 * scaleFactor;
-        [self updateModel:_plutoModel texture:_plutoTexture size:plutoSize xTrans:xTrans yTrans:yTrans];
+        [self updateModel:_plutoModel texture:_plutoTexture size:plutoSize xTrans:xTrans yTrans:yTrans tilt:tilt];
     }
     glPopMatrix();
     
@@ -415,8 +440,9 @@
 }
 
 //updates the model's position, rotation, and texture
-- (void) updateModel:(PlanetModel*) model texture:(ImageTexture*) texture size:(float) size xTrans:(float) xTrans yTrans:(float) yTrans
+- (void) updateModel:(PlanetModel*) model texture:(ImageTexture*) texture size:(float) size xTrans:(float) xTrans yTrans:(float) yTrans tilt:(float) tilt;
 {
+    [model.getPlanetPosition updateTiltSpeedWithSpeed:tilt];
     NSArray* nextLocation = [model.getPlanetPosition nextLocationWithScale:_scale];
     float nextX = [[nextLocation objectAtIndex:0] floatValue];
     float nextY = [[nextLocation objectAtIndex:1] floatValue];
@@ -549,4 +575,45 @@
     _rotRoll = roll;
     _rotYaw = yaw;
 }
+
+
+#pragma mark Label IO functions
+- (void)updateCurrentTimeLabel
+{
+    _currentDateLabel.text = [_starDate getDisplayTime];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    NSDateFormatter *dateFormatterForGettingDate = [[NSDateFormatter alloc] init];
+    [dateFormatterForGettingDate setDateFormat:@"yyyy MMM dd"];
+    NSDate *dateFromStr = [dateFormatterForGettingDate dateFromString:textField.text];
+    
+    if(dateFromStr != nil)
+    {
+        [_starDate updateTimeWithDate:dateFromStr];
+        _dateUpdated = true;
+    }
+    
+    textField.text = nil;
+    [self.view endEditing:YES];
+    return true;
+}
+
+- (void) jumpPlanetPositions
+{
+    //update positions with timeDifference
+    [_earthModel.getPlanetPosition addTimeDifference:[_starDate getTimeDifferenceUpdate]];
+    [_sunModel.getPlanetPosition addTimeDifference:[_starDate getTimeDifferenceUpdate]];
+    [_moonModel.getPlanetPosition addTimeDifference:[_starDate getTimeDifferenceUpdate]];
+    [_mercuryModel.getPlanetPosition addTimeDifference:[_starDate getTimeDifferenceUpdate]];
+    [_venusModel.getPlanetPosition addTimeDifference:[_starDate getTimeDifferenceUpdate]];
+    [_marsModel.getPlanetPosition addTimeDifference:[_starDate getTimeDifferenceUpdate]];
+    [_jupiterModel.getPlanetPosition addTimeDifference:[_starDate getTimeDifferenceUpdate]];
+    [_saturnModel.getPlanetPosition addTimeDifference:[_starDate getTimeDifferenceUpdate]];
+    [_uranusModel.getPlanetPosition addTimeDifference:[_starDate getTimeDifferenceUpdate]];
+    [_neptuneModel.getPlanetPosition addTimeDifference:[_starDate getTimeDifferenceUpdate]];
+    [_plutoModel.getPlanetPosition addTimeDifference:[_starDate getTimeDifferenceUpdate]];
+}
+
 @end
