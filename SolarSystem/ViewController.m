@@ -616,4 +616,21 @@
     [_plutoModel.getPlanetPosition addTimeDifference:[_starDate getTimeDifferenceUpdate]];
 }
 
+#pragma mark Shake to reset functions
+
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{
+    if ( event.subtype == UIEventSubtypeMotionShake )
+    {
+        // Put in code here to handle shake
+        NSLog(@"Hit shake event");
+    }
+    
+    if ( [super respondsToSelector:@selector(motionEnded:withEvent:)] )
+        [super motionEnded:motion withEvent:event];
+}
+
+- (BOOL)canBecomeFirstResponder
+{ return YES; }
+
 @end
