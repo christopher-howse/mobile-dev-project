@@ -739,6 +739,12 @@
     {
         // Put in code here to handle shake
         NSLog(@"Hit shake event");
+        _xOffset = 0;
+        _yOffset = 0;
+        [_zoomValues setObject:@"5" atIndexedSubscript:2];
+        _zoomLvl = 1;
+        _trackingPlanet = false;
+        _trackedPosition = [[Position alloc] init];
     }
     
     if ( [super respondsToSelector:@selector(motionEnded:withEvent:)] )
@@ -747,12 +753,6 @@
 
 - (BOOL)canBecomeFirstResponder
 {
-    _xOffset = 0;
-    _yOffset = 0;
-    [_zoomValues setObject:@"5" atIndexedSubscript:2];
-    _zoomLvl = 1;
-    _trackingPlanet = false;
-    _trackedPosition = [[Position alloc] init];
     return YES;
 }
 

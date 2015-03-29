@@ -142,7 +142,7 @@
 //Checks if an opengl xy coordinate is near the position _x, _y within a certain tolerance
 - (Boolean) isNearbyX:(float) x Y:(float) y
 {
-    float tolerance = 0.1;
+    float tolerance = 0.2;
     if (fabsf(x - _x) < tolerance && fabsf(y + _y) < tolerance)
     {
         return true;
