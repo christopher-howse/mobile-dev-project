@@ -39,16 +39,24 @@
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="aOK-LQ-mWF"/>
                                 </connections>
                             </textField>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dl6-ye-qPM">
+                                <rect key="frame" x="535" y="549" width="51" height="31"/>
+                                <connections>
+                                    <action selector="playPauseClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="QKe-jA-D7n"/>
+                                </connections>
+                            </switch>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="lId-0a-8hA" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="6Im-xc-KRM"/>
+                            <constraint firstItem="dl6-ye-qPM" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="Bt1-i5-0FV"/>
                             <constraint firstItem="4Rg-gr-PwS" firstAttribute="leading" secondItem="fuM-Fe-Xad" secondAttribute="trailing" constant="8" id="V8H-lh-Bc2"/>
                             <constraint firstItem="lId-0a-8hA" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="WHw-or-fW4"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="lId-0a-8hA" secondAttribute="bottom" constant="8" symbolic="YES" id="f9F-HU-Ncx"/>
                             <constraint firstItem="fuM-Fe-Xad" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="fph-PO-rcB"/>
-                            <constraint firstItem="fuM-Fe-Xad" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="12" id="iRp-RG-rqD"/>
-                            <constraint firstItem="4Rg-gr-PwS" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="8" id="oew-TK-2uS"/>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="lId-0a-8hA" secondAttribute="bottom" constant="20" id="phr-rI-DXo"/>
+                            <constraint firstItem="fuM-Fe-Xad" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="8" symbolic="YES" id="fru-eN-7SP"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="dl6-ye-qPM" secondAttribute="bottom" constant="8" symbolic="YES" id="kbi-lt-y3Q"/>
+                            <constraint firstItem="4Rg-gr-PwS" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="8" symbolic="YES" id="lvx-V1-VKh"/>
                             <constraint firstItem="4Rg-gr-PwS" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="wf6-UF-gEr"/>
                         </constraints>
                     </view>

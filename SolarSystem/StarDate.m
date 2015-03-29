@@ -53,7 +53,7 @@
 
 - (void) updateTimeWithTilt: (float) tilt
 {
-     float translatedTilt = MAX(0.01, tilt + 1);
+     float translatedTilt = MAX(0, tilt + 1);
     //convert tilt value into time
     //how much of a year has passed = tilt/365.25636
     //number of seconds in a year = 3.154*10^7
