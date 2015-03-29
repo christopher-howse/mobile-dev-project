@@ -18,21 +18,9 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
-                        <connections>
-                            <outletCollection property="gestureRecognizers" destination="ODq-11-aNP" appends="YES" id="vUI-gO-oFg"/>
-                        </connections>
                     </view>
-                    <connections>
-                        <outlet property="pinching" destination="ODq-11-aNP" id="M6s-qU-kFt"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
-                <pinchGestureRecognizer id="ODq-11-aNP">
-                    <connections>
-                        <action selector="pinch:" destination="vXZ-lx-hvc" id="sjf-G4-UHS"/>
-                        <outlet property="delegate" destination="kh9-bI-dsS" id="5H4-vZ-r0p"/>
-                    </connections>
-                </pinchGestureRecognizer>
             </objects>
         </scene>
     </scenes>

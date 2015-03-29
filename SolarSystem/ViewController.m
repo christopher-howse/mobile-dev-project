@@ -33,6 +33,8 @@
     //translation offset
     float _xOffset;
     float _yOffset;
+    float _xStart;
+    float _yStart;
     
     //montion values
     CGFloat _accX, _accY, _accZ;
@@ -244,8 +246,8 @@
 {
     float scaleFactor = 0.1 * [[_zoomValues objectAtIndex:_zoomLvl] doubleValue];
     NSArray* translation = _trackedPosition.currentLocation;
-    float xTrans = -[[translation objectAtIndex:0] floatValue];//_moveDistance.x/100;
-    float yTrans = -[[translation objectAtIndex:1] floatValue];//-_moveDistance.y/100;
+    float xTrans = -[[translation objectAtIndex:0] floatValue] + _xOffset;//_moveDistance.x/100;
+    float yTrans = -[[translation objectAtIndex:1] floatValue] + _yOffset;//-_moveDistance.y/100;
     
     GLfloat position[] = {xTrans,yTrans,0,1};
     glEnable(GL_LIGHTING);
@@ -371,6 +373,39 @@
     [model drawOpenGLES1];
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    
+    // get touch location & iPhone display size
+    CGPoint pos = [[touches anyObject] locationInView:self.view];
+    
+    //convert pixel values to openGL coordinates for default viewport
+    _xStart = (((pos.x/_size.width) * (2 * (2 * _size.width / _min))) - (2 * _size.width / _min)) - _xOffset;
+    _yStart = (((pos.y/_size.height) * (2 * (2 * _size.height / _min))) - (2 * _size.height / _min)) - _yOffset;
+    
+//    NSLog(@"X value:%f Y value:%f",_xOffset,_yOffset);
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    // get touch location & iPhone display size
+    CGPoint pos = [[touches anyObject] locationInView:self.view];
+    
+//    NSLog(@"X value:%f Y value:%f",temp1,temp2);
+    
+    
+//    if (fabsf(_xOffset + (((pos.x/_size.width) * (2 * (2 * _size.width / _min))) - (2 * _size.width / _min)) - _xOffset - _xStart) < 10*[[_zoomValues objectAtIndex:_zoomLvl] doubleValue])
+//    {
+        _xOffset += (((pos.x/_size.width) * (2 * (2 * _size.width / _min))) - (2 * _size.width / _min)) - _xOffset - _xStart;
+//    }
+//    if (fabsf(_yOffset + (((pos.y/_size.height) * (2 * (2 * _size.height / _min))) - (2 * _size.height / _min)) - _yOffset - _yStart) < 10*[[_zoomValues objectAtIndex:_zoomLvl] doubleValue])
+//    {
+        _yOffset += (((pos.y/_size.height) * (2 * (2 * _size.height / _min))) - (2 * _size.height / _min)) - _yOffset - _yStart;
+//    }
+//    NSLog(@"X value:%f Y value:%f",fabsf(_xOffset),fabsf(_yOffset));
+}
+
+
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     //if we are already tracking a planet
@@ -391,8 +426,12 @@
         CGPoint pos = [[touches anyObject] locationInView:self.view];
         
         //convert pixel values to openGL coordinates for default viewport
-        float xOpenGlCoord = ((pos.x/_size.width) * (2 * (2 * _size.width / _min))) - (2 * _size.width / _min);
-        float yOpenGlCoord = ((pos.y/_size.height) * (2 * (2 * _size.height / _min))) - (2 * _size.height / _min);
+        float xOpenGlCoord = ((pos.x/_size.width) * (2 * (2 * _size.width / _min))) - (2 * _size.width / _min) - _xOffset;
+        float yOpenGlCoord = ((pos.y/_size.height) * (2 * (2 * _size.height / _min))) - (2 * _size.height / _min) + _yOffset;
+        
+//        NSLog(@"X value:%f Y value:%f",xOpenGlCoord,yOpenGlCoord);
+//        
+//        NSLog(@"X value:%f Y value:%f",_xOffset,_yOffset);
         
         //checks for touch being near planets
         if([_earthModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
@@ -439,54 +478,6 @@
     }
 }
 
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    
-}
-
-- (IBAction)pinch:(UIPinchGestureRecognizer *)sender
-{
-    //if pinch has just began set comparitor previous scale
-    if (sender.state == UIGestureRecognizerStateBegan)
-    {
-        _previousScale = sender.scale;
-        _initalScale = 0;
-    }
-    else if (sender.state == UIGestureRecognizerStateChanged)
-    {
-                NSLog(@"pinching");
-        //once pinch starts changing if scale is less then zoom out else zoom in
-        if (_previousScale < sender.scale)
-        {
-            if (_zoomLvl < 3)
-            {
-                _initalScale += 1;
-                if( 30 < _initalScale)
-                {
-                    _zoomLvl += 1;
-                    _initalScale = 0;
-                }
-            }
-            
-        }
-        //zoom in
-        else
-        {
-            if (_zoomLvl > 0)
-            {
-                _initalScale -= 1;
-                if(-30 > _initalScale)
-                {
-                    _zoomLvl -= 1;
-                    _initalScale = 0;
-                }
-            }
-        }
-        _previousScale = sender.scale;
-    }
-}
-
-
 -(void) handlePinch:(UIPinchGestureRecognizer *)gestureRecognizer {
     //if pinch has just began set comparitor previous scale
     if ([gestureRecognizer state] == UIGestureRecognizerStateBegan)
@@ -497,38 +488,42 @@
     else if ([gestureRecognizer state] == UIGestureRecognizerStateChanged)
     {
         NSLog(@"pinching");
-        //once pinch starts changing if scale is less then zoom out else zoom in
+        //once pinch starts changing if scale is less then zoom in else zoom out
         if (_previousScale < [gestureRecognizer scale])
         {
             if (_zoomLvl < 3)
             {
                 _initalScale += [gestureRecognizer velocity];
-                NSLog(@"%f",_initalScale);
                 if( 40 < _initalScale)
                 {
                     _zoomLvl += 1;
+                        _xOffset = _xOffset*([[_zoomValues objectAtIndex:_zoomLvl] doubleValue]/[[_zoomValues objectAtIndex:_zoomLvl-1] doubleValue]);
+                        _yOffset = _yOffset*([[_zoomValues objectAtIndex:_zoomLvl] doubleValue]/[[_zoomValues objectAtIndex:_zoomLvl-1] doubleValue]);
                     _initalScale = 0;
                 }
             }
             
         }
-        //zoom in
+        //zoom out
         else
         {
             if (_zoomLvl > 0)
             {
                 _initalScale += [gestureRecognizer velocity];
-                NSLog(@"%f",_initalScale);
-                if(-30 > _initalScale)
+                if(-10 > _initalScale)
                 {
                     _zoomLvl -= 1;
+                        _xOffset = _xOffset*([[_zoomValues objectAtIndex:_zoomLvl] doubleValue]/[[_zoomValues objectAtIndex:_zoomLvl+1] doubleValue]);
+                        _yOffset = _yOffset*([[_zoomValues objectAtIndex:_zoomLvl] doubleValue]/[[_zoomValues objectAtIndex:_zoomLvl+1] doubleValue]);
                     _initalScale = 0;
                 }
             }
         }
+        NSLog(@"X value:%f Y value:%f",_xOffset,_yOffset);
         _previousScale = [gestureRecognizer scale];
     }
 }
+
 - (void) updateCMDataWithX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z pitch:(double)pitch roll:(double)roll yaw:(double)yaw
 {
     _accX = x;

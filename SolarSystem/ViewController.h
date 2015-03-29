@@ -11,7 +11,6 @@
 
 @interface ViewController : GLKViewController
 
-- (IBAction)pinch:(UIPinchGestureRecognizer *)sender;
 - (void) updateCMDataWithX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z pitch:(double)pitch roll:(double)roll yaw:(double)yaw;
 
 @end
