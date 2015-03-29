@@ -34,6 +34,8 @@
     //translation offset
     float _xOffset;
     float _yOffset;
+    float _xOffsetStore;
+    float _yOffsetStore;
     float _xStart;
     float _yStart;
     
@@ -71,6 +73,8 @@
 - (void)setupGL;
 - (void)tearDownGL;
 - (void)setupOrthographicView: (CGSize)size;
+- (void) storeOffsetValues;
+- (void) restoreOffsetValues;
 @end
 
 @implementation ViewController
@@ -268,7 +272,7 @@
     float scaleFactor = 0.1 * [[_zoomValues objectAtIndex:_zoomLvl] doubleValue];
     NSArray* translation = _trackedPosition.currentLocation;
     float xTrans = -[[translation objectAtIndex:0] floatValue] + _xOffset;//_moveDistance.x/100;
-    float yTrans = -[[translation objectAtIndex:1] floatValue] + _yOffset;//-_moveDistance.y/100;
+    float yTrans = -[[translation objectAtIndex:1] floatValue] - _yOffset;//-_moveDistance.y/100;
     
     //Update tilt speed from device rotation
     float tilt = _accX;
@@ -481,7 +485,6 @@
     _xStart = (((pos.x/_size.width) * (2 * (2 * _size.width / _min))) - (2 * _size.width / _min)) - _xOffset;
     _yStart = (((pos.y/_size.height) * (2 * (2 * _size.height / _min))) - (2 * _size.height / _min)) - _yOffset;
     
-//    NSLog(@"X value:%f Y value:%f",_xOffset,_yOffset);
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
@@ -489,18 +492,8 @@
     // get touch location & iPhone display size
     CGPoint pos = [[touches anyObject] locationInView:self.view];
     
-//    NSLog(@"X value:%f Y value:%f",temp1,temp2);
-    
-    
-//    if (fabsf(_xOffset + (((pos.x/_size.width) * (2 * (2 * _size.width / _min))) - (2 * _size.width / _min)) - _xOffset - _xStart) < 10*[[_zoomValues objectAtIndex:_zoomLvl] doubleValue])
-//    {
-        _xOffset += (((pos.x/_size.width) * (2 * (2 * _size.width / _min))) - (2 * _size.width / _min)) - _xOffset - _xStart;
-//    }
-//    if (fabsf(_yOffset + (((pos.y/_size.height) * (2 * (2 * _size.height / _min))) - (2 * _size.height / _min)) - _yOffset - _yStart) < 10*[[_zoomValues objectAtIndex:_zoomLvl] doubleValue])
-//    {
-        _yOffset += (((pos.y/_size.height) * (2 * (2 * _size.height / _min))) - (2 * _size.height / _min)) - _yOffset - _yStart;
-//    }
-//    NSLog(@"X value:%f Y value:%f",fabsf(_xOffset),fabsf(_yOffset));
+    _xOffset += (((pos.x/_size.width) * (2 * (2 * _size.width / _min))) - (2 * _size.width / _min)) - _xOffset - _xStart;
+    _yOffset += (((pos.y/_size.height) * (2 * (2 * _size.height / _min))) - (2 * _size.height / _min)) - _yOffset - _yStart;
 }
 
 
@@ -515,6 +508,7 @@
         [_zoomValues setObject:@"5" atIndexedSubscript:2];
         _zoomLvl = 1;
         _trackedPosition = [[Position alloc] init];
+        [self restoreOffsetValues];
     }
     else
     {
@@ -525,11 +519,7 @@
         
         //convert pixel values to openGL coordinates for default viewport
         float xOpenGlCoord = ((pos.x/_size.width) * (2 * (2 * _size.width / _min))) - (2 * _size.width / _min) - _xOffset;
-        float yOpenGlCoord = ((pos.y/_size.height) * (2 * (2 * _size.height / _min))) - (2 * _size.height / _min) + _yOffset;
-        
-//        NSLog(@"X value:%f Y value:%f",xOpenGlCoord,yOpenGlCoord);
-//        
-//        NSLog(@"X value:%f Y value:%f",_xOffset,_yOffset);
+        float yOpenGlCoord = ((pos.y/_size.height) * (2 * (2 * _size.height / _min))) - (2 * _size.height / _min) - _yOffset;
         
         //checks for touch being near planets
         if([_earthModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
@@ -539,6 +529,7 @@
             _zoomLvl = 2;
             _trackedPosition = _earthModel.getPlanetPosition;
             _trackingPlanet = true;
+            [self storeOffsetValues];
         }
         else if([_moonModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
@@ -547,6 +538,7 @@
             _zoomLvl = 2;
             _trackedPosition = _moonModel.getPlanetPosition;
             _trackingPlanet = true;
+            [self storeOffsetValues];
         }
         else if([_marsModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
@@ -555,6 +547,7 @@
             _zoomLvl = 2;
             _trackedPosition = _marsModel.getPlanetPosition;
             _trackingPlanet = true;
+            [self storeOffsetValues];
         }
         else if([_venusModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
@@ -563,6 +556,7 @@
             _zoomLvl = 2;
             _trackedPosition = _venusModel.getPlanetPosition;
             _trackingPlanet = true;
+            [self storeOffsetValues];
         }
         else if([_mercuryModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
@@ -571,36 +565,52 @@
             _zoomLvl = 2;
             _trackedPosition = _mercuryModel.getPlanetPosition;
             _trackingPlanet = true;
+            [self storeOffsetValues];
         }
         else if([_jupiterModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
             _scale = 1;
+            [_zoomValues setObject:@"1" atIndexedSubscript:2];
+            _zoomLvl = 2;
             _trackedPosition = _jupiterModel.getPlanetPosition;
             _trackingPlanet = true;
+            [self storeOffsetValues];
         }
         else if([_saturnModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
             _scale = 1;
+            [_zoomValues setObject:@"1" atIndexedSubscript:2];
+            _zoomLvl = 2;
             _trackedPosition = _saturnModel.getPlanetPosition;
             _trackingPlanet = true;
+            [self storeOffsetValues];
         }
         else if([_neptuneModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
             _scale = 1.5;
+            [_zoomValues setObject:@"1.5" atIndexedSubscript:2];
+            _zoomLvl = 2;
             _trackedPosition = _neptuneModel.getPlanetPosition;
             _trackingPlanet = true;
+            [self storeOffsetValues];
         }
         else if([_uranusModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
             _scale = 2;
+            [_zoomValues setObject:@"2" atIndexedSubscript:2];
+            _zoomLvl = 2;
             _trackedPosition = _uranusModel.getPlanetPosition;
             _trackingPlanet = true;
+            [self storeOffsetValues];
         }
         else if([_plutoModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
             _scale = 8;
+            [_zoomValues setObject:@"8" atIndexedSubscript:2];
+            _zoomLvl = 2;
             _trackedPosition = _plutoModel.getPlanetPosition;
             _trackingPlanet = true;
+            [self storeOffsetValues];
         }
     }
 }
@@ -716,6 +726,30 @@
 }
 
 - (BOOL)canBecomeFirstResponder
-{ return YES; }
+{
+    _xOffset = 0;
+    _yOffset = 0;
+    [_zoomValues setObject:@"5" atIndexedSubscript:2];
+    _zoomLvl = 1;
+    _trackingPlanet = false;
+    _trackedPosition = [[Position alloc] init];
+    return YES;
+}
+
+- (void) storeOffsetValues
+{
+    _xOffsetStore = _xOffset;
+    _yOffsetStore = _yOffset;
+    _xOffset = 0;
+    _yOffset = 0;
+    
+}
+
+- (void) restoreOffsetValues
+{
+    _xOffset = _xOffsetStore;
+    _yOffset = _yOffsetStore;
+}
+
 
 @end
