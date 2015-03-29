@@ -752,12 +752,15 @@
 
 - (void)doDoubleTap
 {
-    _trackingPlanet = false;
-    _scale = 1;
-    [_zoomValues setObject:@"5" atIndexedSubscript:2];
-    _zoomLvl = 1;
-    _trackedPosition = [[Position alloc] init];
-    [self restoreOffsetValues];
+    if(_trackingPlanet)
+    {
+        _trackingPlanet = false;
+        _scale = 1;
+        [_zoomValues setObject:@"5" atIndexedSubscript:2];
+        _zoomLvl = 1;
+        _trackedPosition = [[Position alloc] init];
+        [self restoreOffsetValues];
+    }
 }
 
 - (BOOL)canBecomeFirstResponder
