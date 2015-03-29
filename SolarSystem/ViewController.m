@@ -29,6 +29,7 @@
     float _initalScale;
     //zoom level
     int _zoomLvl;
+    int _zoomLvlStore;
     NSMutableArray *_zoomValues;
     
     //translation offset
@@ -524,93 +525,93 @@
         //checks for touch being near planets
         if([_earthModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
+            [self storeOffsetValues];
             _scale = 5;
             [_zoomValues setObject:@"5" atIndexedSubscript:2];
             _zoomLvl = 2;
             _trackedPosition = _earthModel.getPlanetPosition;
             _trackingPlanet = true;
-            [self storeOffsetValues];
         }
         else if([_moonModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
+            [self storeOffsetValues];
             _scale = 8;
             [_zoomValues setObject:@"8" atIndexedSubscript:2];
             _zoomLvl = 2;
             _trackedPosition = _moonModel.getPlanetPosition;
             _trackingPlanet = true;
-            [self storeOffsetValues];
         }
         else if([_marsModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
+            [self storeOffsetValues];
             _scale = 8;
             [_zoomValues setObject:@"8" atIndexedSubscript:2];
             _zoomLvl = 2;
             _trackedPosition = _marsModel.getPlanetPosition;
             _trackingPlanet = true;
-            [self storeOffsetValues];
         }
         else if([_venusModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
+            [self storeOffsetValues];
             _scale = 5;
             [_zoomValues setObject:@"5" atIndexedSubscript:2];
             _zoomLvl = 2;
             _trackedPosition = _venusModel.getPlanetPosition;
             _trackingPlanet = true;
-            [self storeOffsetValues];
         }
         else if([_mercuryModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
+            [self storeOffsetValues];
             _scale = 5.5;
             [_zoomValues setObject:@"5.5" atIndexedSubscript:2];
             _zoomLvl = 2;
             _trackedPosition = _mercuryModel.getPlanetPosition;
             _trackingPlanet = true;
-            [self storeOffsetValues];
         }
         else if([_jupiterModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
+            [self storeOffsetValues];
             _scale = 1;
             [_zoomValues setObject:@"1" atIndexedSubscript:2];
             _zoomLvl = 2;
             _trackedPosition = _jupiterModel.getPlanetPosition;
             _trackingPlanet = true;
-            [self storeOffsetValues];
         }
         else if([_saturnModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
+            [self storeOffsetValues];
             _scale = 1;
             [_zoomValues setObject:@"1" atIndexedSubscript:2];
             _zoomLvl = 2;
             _trackedPosition = _saturnModel.getPlanetPosition;
             _trackingPlanet = true;
-            [self storeOffsetValues];
         }
         else if([_neptuneModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
+            [self storeOffsetValues];
             _scale = 1.5;
             [_zoomValues setObject:@"1.5" atIndexedSubscript:2];
             _zoomLvl = 2;
             _trackedPosition = _neptuneModel.getPlanetPosition;
             _trackingPlanet = true;
-            [self storeOffsetValues];
         }
         else if([_uranusModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
+            [self storeOffsetValues];
             _scale = 2;
             [_zoomValues setObject:@"2" atIndexedSubscript:2];
             _zoomLvl = 2;
             _trackedPosition = _uranusModel.getPlanetPosition;
             _trackingPlanet = true;
-            [self storeOffsetValues];
         }
         else if([_plutoModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
+            [self storeOffsetValues];
             _scale = 8;
             [_zoomValues setObject:@"8" atIndexedSubscript:2];
             _zoomLvl = 2;
             _trackedPosition = _plutoModel.getPlanetPosition;
             _trackingPlanet = true;
-            [self storeOffsetValues];
         }
     }
 }
@@ -740,6 +741,7 @@
 {
     _xOffsetStore = _xOffset;
     _yOffsetStore = _yOffset;
+    _zoomLvlStore = _zoomLvl;
     _xOffset = 0;
     _yOffset = 0;
     
@@ -749,6 +751,7 @@
 {
     _xOffset = _xOffsetStore;
     _yOffset = _yOffsetStore;
+    _zoomLvl = _zoomLvlStore;
 }
 
 
