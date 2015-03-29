@@ -98,6 +98,10 @@
     UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
     [view addGestureRecognizer:pinchGesture];
     
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget: self action:@selector(doDoubleTap)];
+    doubleTap.numberOfTapsRequired = 2;
+    [view addGestureRecognizer:doubleTap];
+    
     [self setupGL];
 }
 
@@ -510,12 +514,12 @@
     //a touch will revert the view to default
     if(_trackingPlanet)
     {
-        _trackingPlanet = false;
-        _scale = 1;
-        [_zoomValues setObject:@"5" atIndexedSubscript:2];
-        _zoomLvl = 1;
-        _trackedPosition = [[Position alloc] init];
-        [self restoreOffsetValues];
+//        _trackingPlanet = false;
+//        _scale = 1;
+//        [_zoomValues setObject:@"5" atIndexedSubscript:2];
+//        _zoomLvl = 1;
+//        _trackedPosition = [[Position alloc] init];
+//        [self restoreOffsetValues];
     }
     else
     {
@@ -749,6 +753,20 @@
     
     if ( [super respondsToSelector:@selector(motionEnded:withEvent:)] )
         [super motionEnded:motion withEvent:event];
+}
+
+
+- (void)doDoubleTap
+{
+    if(_trackingPlanet)
+    {
+        _trackingPlanet = false;
+        _scale = 1;
+        [_zoomValues setObject:@"5" atIndexedSubscript:2];
+        _zoomLvl = 1;
+        _trackedPosition = [[Position alloc] init];
+        [self restoreOffsetValues];
+    }
 }
 
 - (BOOL)canBecomeFirstResponder
