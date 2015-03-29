@@ -49,6 +49,7 @@
     IBOutlet UILabel *_currentDateLabel;
     //whether or not the date has been manually set
     Boolean _dateUpdated;
+    Boolean _timePaused;
     
     //the position of the planet being followed
     Position *_trackedPosition;
@@ -272,6 +273,11 @@
     
     //Update tilt speed from device rotation
     float tilt = _accX;
+    if(_timePaused)
+    {
+        tilt = -1;
+    }
+
     //Update stardate based on tilt value;
     [_starDate updateTimeWithTilt:tilt];
     [self updateCurrentTimeLabel];
@@ -385,70 +391,70 @@
     
     glPushMatrix();
     {
-        [_earthOrbit updateVerticesWithScale:_scale xTrans:xTrans yTrans:yTrans];
+        [_earthOrbit updateVerticesWithScale: [[_zoomValues objectAtIndex:_zoomLvl] doubleValue] xTrans:xTrans yTrans:yTrans];
         [_earthOrbit drawOpenGLES1];
     }
     glPopMatrix();
     
     glPushMatrix();
     {
-        [_moonOrbit updateVerticesWithScale:_scale xTrans:xTrans yTrans:yTrans];
+        [_moonOrbit updateVerticesWithScale: [[_zoomValues objectAtIndex:_zoomLvl] doubleValue] xTrans:xTrans yTrans:yTrans];
         [_moonOrbit drawOpenGLES1];
     }
     glPopMatrix();
     
     glPushMatrix();
     {
-        [_marsOrbit updateVerticesWithScale:_scale xTrans:xTrans yTrans:yTrans];
+        [_marsOrbit updateVerticesWithScale: [[_zoomValues objectAtIndex:_zoomLvl] doubleValue] xTrans:xTrans yTrans:yTrans];
         [_marsOrbit drawOpenGLES1];
     }
     glPopMatrix();
     
     glPushMatrix();
     {
-        [_mercuryOrbit updateVerticesWithScale:_scale xTrans:xTrans yTrans:yTrans];
+        [_mercuryOrbit updateVerticesWithScale: [[_zoomValues objectAtIndex:_zoomLvl] doubleValue] xTrans:xTrans yTrans:yTrans];
         [_mercuryOrbit drawOpenGLES1];
     }
     glPopMatrix();
     
     glPushMatrix();
     {
-        [_venusOrbit updateVerticesWithScale:_scale xTrans:xTrans yTrans:yTrans];
+        [_venusOrbit updateVerticesWithScale: [[_zoomValues objectAtIndex:_zoomLvl] doubleValue] xTrans:xTrans yTrans:yTrans];
         [_venusOrbit drawOpenGLES1];
     }
     glPopMatrix();
     
     glPushMatrix();
     {
-        [_jupiterOrbit updateVerticesWithScale:_scale xTrans:xTrans yTrans:yTrans];
+        [_jupiterOrbit updateVerticesWithScale: [[_zoomValues objectAtIndex:_zoomLvl] doubleValue] xTrans:xTrans yTrans:yTrans];
         [_jupiterOrbit drawOpenGLES1];
     }
     glPopMatrix();
     
     glPushMatrix();
     {
-        [_saturnOrbit updateVerticesWithScale:_scale xTrans:xTrans yTrans:yTrans];
+        [_saturnOrbit updateVerticesWithScale: [[_zoomValues objectAtIndex:_zoomLvl] doubleValue] xTrans:xTrans yTrans:yTrans];
         [_saturnOrbit drawOpenGLES1];
     }
     glPopMatrix();
     
     glPushMatrix();
     {
-        [_neptuneOrbit updateVerticesWithScale:_scale xTrans:xTrans yTrans:yTrans];
+        [_neptuneOrbit updateVerticesWithScale: [[_zoomValues objectAtIndex:_zoomLvl] doubleValue] xTrans:xTrans yTrans:yTrans];
         [_neptuneOrbit drawOpenGLES1];
     }
     glPopMatrix();
     
     glPushMatrix();
     {
-        [_uranusOrbit updateVerticesWithScale:_scale xTrans:xTrans yTrans:yTrans];
+        [_uranusOrbit updateVerticesWithScale: [[_zoomValues objectAtIndex:_zoomLvl] doubleValue] xTrans:xTrans yTrans:yTrans];
         [_uranusOrbit drawOpenGLES1];
     }
     glPopMatrix();
 
     glPushMatrix();
     {
-        [_plutoOrbit updateVerticesWithScale:_scale xTrans:xTrans yTrans:yTrans];
+        [_plutoOrbit updateVerticesWithScale: [[_zoomValues objectAtIndex:_zoomLvl] doubleValue] xTrans:xTrans yTrans:yTrans];
         [_plutoOrbit drawOpenGLES1];
     }
     glPopMatrix();
@@ -700,6 +706,19 @@
     [_neptuneModel.getPlanetPosition addTimeDifference:[_starDate getTimeDifferenceUpdate]];
     [_plutoModel.getPlanetPosition addTimeDifference:[_starDate getTimeDifferenceUpdate]];
 }
+
+- (IBAction)playPauseClicked:(UISwitch*)sender
+{
+    if ([sender isOn]) {
+        NSLog(@"Switch is on");
+        _timePaused = false;
+    } else {
+        NSLog(@"Switch is off");
+        _timePaused = true;
+    }
+
+}
+
 
 #pragma mark Shake to reset functions
 

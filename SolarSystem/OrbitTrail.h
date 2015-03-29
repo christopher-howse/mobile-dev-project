@@ -20,7 +20,7 @@
 
 -(OrbitTrail*) initWithSections:(int)sections amplitude:(float)amplitude relativePosition:(Position*) relativePosition;
 -(void) dealloc;
--(void)updateVerticesWithScale:(float)scale xTrans:(float)xTrans yTrans:(float)yTrans;
+-(void) updateVerticesWithScale:(float)scale xTrans:(float)xTrans yTrans:(float)yTrans;
 -(void)drawOpenGLES1;
 
 @end
