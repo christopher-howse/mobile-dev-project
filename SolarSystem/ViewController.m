@@ -512,16 +512,7 @@
 {
     //if we are already tracking a planet
     //a touch will revert the view to default
-    if(_trackingPlanet)
-    {
-//        _trackingPlanet = false;
-//        _scale = 1;
-//        [_zoomValues setObject:@"5" atIndexedSubscript:2];
-//        _zoomLvl = 1;
-//        _trackedPosition = [[Position alloc] init];
-//        [self restoreOffsetValues];
-    }
-    else
+    if(!_trackingPlanet)
     {
         //Check to see if the event occured within any of the planets
         //if so, set the scale and translation to follow that planet
