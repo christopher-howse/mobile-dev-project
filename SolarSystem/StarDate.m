@@ -47,6 +47,7 @@
     NSTimeInterval secondsBetween = [_date timeIntervalSinceDate:date];
     _date = [_date dateByAddingTimeInterval:-secondsBetween];
 
+    //convert seconds into number of earth years
     _timeDifference = (-secondsBetween/31540000)*365.25636;
 }
 

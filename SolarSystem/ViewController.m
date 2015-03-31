@@ -18,8 +18,6 @@
 
 @interface ViewController ()
 {
-    //the level of zoom
-    CGFloat _scale;
     //the size of the screen
     CGSize _size;
     //the min of the width and height of the screen
@@ -156,7 +154,6 @@
 
 - (void)setupGL
 {
-    _scale = 1;
     _trackingPlanet = false;
     
     float astronomicalScaleFactor = 1.25; //for ease of change
@@ -168,8 +165,8 @@
     
     [EAGLContext setCurrentContext:self.context];
     
-    _zoomValues = [NSMutableArray arrayWithObjects: @"0.1",@"1",@"5",@"10", nil];
-    _zoomLvl = 1;
+    _zoomValues = [NSMutableArray arrayWithObjects: @"0.125",@"0.25",@"0.5",@"1",@"2",@"4",@"8", nil];
+    _zoomLvl = 3;
     
     _CMData = [[DeviceMotion alloc] initWithController:self];
     [_CMData startMonitoringMotion];
@@ -186,7 +183,7 @@
     Position* earthPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:earthPeriod amplitude:astronomicalUnit dayPeriod:0.9972*earthDayPeriod percentOribit:0];
     Position* moonPosition = [[Position alloc] initWithRelativePosition:earthPosition yearPeriod:0.0748*earthPeriod amplitude:0.15 dayPeriod:27.321*earthDayPeriod percentOribit:0];
     Position* marsPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:1.881*earthPeriod amplitude:1.524*astronomicalUnit dayPeriod:1.0259*earthDayPeriod percentOribit:72.22];
-    Position* mercuryPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:0.240*earthPeriod amplitude:0.387*astronomicalUnit dayPeriod:58.649*earthDayPeriod percentOribit:41.94];
+    Position* mercuryPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:0.240846*earthPeriod amplitude:0.387*astronomicalUnit dayPeriod:58.649*earthDayPeriod percentOribit:41.94];
     Position* venusPosition = [[Position alloc] initWithRelativePosition:sunPosition yearPeriod:0.615*earthPeriod amplitude:0.723*astronomicalUnit dayPeriod:243.019*earthDayPeriod percentOribit:23.61];
     
     //Outer Planet Positions
@@ -277,13 +274,14 @@
 {
     float scaleFactor = 0.1 * [[_zoomValues objectAtIndex:_zoomLvl] doubleValue];
     NSArray* translation = _trackedPosition.currentLocation;
-    float xTrans = -[[translation objectAtIndex:0] floatValue] + _xOffset;//_moveDistance.x/100;
-    float yTrans = -[[translation objectAtIndex:1] floatValue] - _yOffset;//-_moveDistance.y/100;
+    float xTrans = -[[translation objectAtIndex:0] floatValue] + _xOffset;
+    float yTrans = -[[translation objectAtIndex:1] floatValue] - _yOffset;
     
     //Update tilt speed from device rotation
     float tilt = _accX;
     if(_timePaused)
     {
+        //set time to stationary tilt value
         tilt = -1;
     }
 
@@ -510,18 +508,7 @@
 
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    //if we are already tracking a planet
-    //a touch will revert the view to default
-    if(_trackingPlanet)
-    {
-//        _trackingPlanet = false;
-//        _scale = 1;
-//        [_zoomValues setObject:@"5" atIndexedSubscript:2];
-//        _zoomLvl = 1;
-//        _trackedPosition = [[Position alloc] init];
-//        [self restoreOffsetValues];
-    }
-    else
+    if(!_trackingPlanet)
     {
         //Check to see if the event occured within any of the planets
         //if so, set the scale and translation to follow that planet
@@ -536,90 +523,70 @@
         if([_earthModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
             [self storeOffsetValues];
-            _scale = 5;
-            [_zoomValues setObject:@"5" atIndexedSubscript:2];
-            _zoomLvl = 2;
+            _zoomLvl = 4;
             _trackedPosition = _earthModel.getPlanetPosition;
             _trackingPlanet = true;
         }
         else if([_moonModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
             [self storeOffsetValues];
-            _scale = 8;
-            [_zoomValues setObject:@"8" atIndexedSubscript:2];
-            _zoomLvl = 2;
+            _zoomLvl = 5;
             _trackedPosition = _moonModel.getPlanetPosition;
             _trackingPlanet = true;
         }
         else if([_marsModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
             [self storeOffsetValues];
-            _scale = 8;
-            [_zoomValues setObject:@"8" atIndexedSubscript:2];
-            _zoomLvl = 2;
+            _zoomLvl = 5;
             _trackedPosition = _marsModel.getPlanetPosition;
             _trackingPlanet = true;
         }
         else if([_venusModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
             [self storeOffsetValues];
-            _scale = 5;
-            [_zoomValues setObject:@"5" atIndexedSubscript:2];
-            _zoomLvl = 2;
+            _zoomLvl = 4;
             _trackedPosition = _venusModel.getPlanetPosition;
             _trackingPlanet = true;
         }
         else if([_mercuryModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
             [self storeOffsetValues];
-            _scale = 5.5;
-            [_zoomValues setObject:@"5.5" atIndexedSubscript:2];
-            _zoomLvl = 2;
+            _zoomLvl = 5;
             _trackedPosition = _mercuryModel.getPlanetPosition;
             _trackingPlanet = true;
         }
         else if([_jupiterModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
             [self storeOffsetValues];
-            _scale = 1;
-            [_zoomValues setObject:@"1" atIndexedSubscript:2];
-            _zoomLvl = 2;
+            _zoomLvl = 3;
             _trackedPosition = _jupiterModel.getPlanetPosition;
             _trackingPlanet = true;
         }
         else if([_saturnModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
             [self storeOffsetValues];
-            _scale = 1;
-            [_zoomValues setObject:@"1" atIndexedSubscript:2];
-            _zoomLvl = 2;
+            _zoomLvl = 3;
             _trackedPosition = _saturnModel.getPlanetPosition;
             _trackingPlanet = true;
         }
         else if([_neptuneModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
             [self storeOffsetValues];
-            _scale = 1.5;
-            [_zoomValues setObject:@"1.5" atIndexedSubscript:2];
-            _zoomLvl = 2;
+            _zoomLvl = 4;
             _trackedPosition = _neptuneModel.getPlanetPosition;
             _trackingPlanet = true;
         }
         else if([_uranusModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
             [self storeOffsetValues];
-            _scale = 2;
-            [_zoomValues setObject:@"2" atIndexedSubscript:2];
-            _zoomLvl = 2;
+            _zoomLvl = 4;
             _trackedPosition = _uranusModel.getPlanetPosition;
             _trackingPlanet = true;
         }
         else if([_plutoModel.getPlanetPosition isNearbyX:xOpenGlCoord Y:yOpenGlCoord])
         {
             [self storeOffsetValues];
-            _scale = 8;
-            [_zoomValues setObject:@"8" atIndexedSubscript:2];
-            _zoomLvl = 2;
+            _zoomLvl = 5;
             _trackedPosition = _plutoModel.getPlanetPosition;
             _trackingPlanet = true;
         }
@@ -639,7 +606,7 @@
         //once pinch starts changing if scale is less then zoom in else zoom out
         if (_previousScale < [gestureRecognizer scale])
         {
-            if (_zoomLvl < 3)
+            if (_zoomLvl < 6)
             {
                 _initalScale += [gestureRecognizer velocity];
                 if( 40 < _initalScale)
@@ -725,10 +692,10 @@
 - (IBAction)playPauseClicked:(UISwitch*)sender
 {
     if ([sender isOn]) {
-        NSLog(@"Switch is on");
+        NSLog(@"Switch is on -> Play Time");
         _timePaused = false;
     } else {
-        NSLog(@"Switch is off");
+        NSLog(@"Switch is off -> Pause Time");
         _timePaused = true;
     }
 
@@ -741,12 +708,10 @@
 {
     if ( event.subtype == UIEventSubtypeMotionShake )
     {
-        // Put in code here to handle shake
-        NSLog(@"Hit shake event");
+        NSLog(@"Hit shake event -> Return to initial settings");
         _xOffset = 0;
         _yOffset = 0;
-        [_zoomValues setObject:@"5" atIndexedSubscript:2];
-        _zoomLvl = 1;
+        _zoomLvl = 3;
         _trackingPlanet = false;
         _trackedPosition = [[Position alloc] init];
     }
@@ -761,9 +726,7 @@
     if(_trackingPlanet)
     {
         _trackingPlanet = false;
-        _scale = 1;
-        [_zoomValues setObject:@"5" atIndexedSubscript:2];
-        _zoomLvl = 1;
+        _zoomLvl = 3;
         _trackedPosition = [[Position alloc] init];
         [self restoreOffsetValues];
     }
