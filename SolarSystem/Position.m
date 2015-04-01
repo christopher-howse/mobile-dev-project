@@ -19,6 +19,7 @@
     float _rotation; //the number of degrees the object has been rotated
     float _locFrameNum, _rotFrameNum; //values to track location and rotation progress
     float _tiltSpeed; //rate at which time passes based on the tilt of the device
+    float _relativeSize; //size of planet relative to earth
     Position *_relativePosition; //the position of the object's object of gravitational pull. ie. For the earth -> the sun, for the moon -> the earth
 }
 @end
@@ -26,7 +27,7 @@
 @implementation Position
 
 //Initialize for planet with known periods, amplitude, and relative position
--(Position*) initWithRelativePosition:(Position*) relativePosition yearPeriod:(float) yearPeriod amplitude: (float) amplitude dayPeriod: (float) dayPeriod percentOribit:(float) percentOribit
+-(Position*) initWithRelativePosition:(Position*) relativePosition yearPeriod:(float) yearPeriod amplitude: (float) amplitude dayPeriod: (float) dayPeriod percentOribit:(float) percentOribit relativeSize:(float) relativeSize
 {
     //initialize with the default initializer first
     self = [self init];
@@ -51,6 +52,8 @@
         
         //set locFrameNum based on radians
         _locFrameNum = ((percentOribit/100) * _yearPeriod);
+        
+        _relativeSize = relativeSize;
     }
     
     return self;
@@ -137,6 +140,11 @@
     
     //return the new rotation value as a NSNumber
     return [[NSNumber alloc] initWithFloat:_rotation];
+}
+
+- (float) getRelativeSize
+{
+    return _relativeSize;
 }
 
 //Checks if an opengl xy coordinate is near the position _x, _y within a certain tolerance
