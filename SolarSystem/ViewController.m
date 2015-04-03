@@ -66,8 +66,8 @@
 - (void)setupGL;
 - (void)tearDownGL;
 - (void)setupOrthographicView: (CGSize)size;
-- (void) storeOffsetValues;
-- (void) restoreOffsetValues;
+- (void)storeOffsetValues;
+- (void)restoreOffsetValues;
 @end
 
 @implementation ViewController
@@ -123,28 +123,7 @@
     }
 }
 
-- (void)update
-{
-    [self setupOrthographicView: self.view.bounds.size];
-}
-
-- (void)setupLightSource
-{
-    //initialize the lighting sources
-    //diffusion light at center of sun
-    GLfloat diffuse[] = {1.0, 1.0, 1.0, 1.0};
-    GLfloat position[] = {0,0,0,1};
-    //ambient light so the rest of the planets can be viewed
-    GLfloat ambient[] = {0.9, 0.9, 0.9};
-    
-    glEnable(GL_LIGHTING);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
-    glLightfv(GL_LIGHT0, GL_POSITION, position);
-    glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
-    
-    glEnable(GL_LIGHT0);
-}
-
+#pragma mark OpenGL setup, teardown, and update
 - (void)setupGL
 {
     _trackingPlanet = false;
@@ -180,6 +159,23 @@
     [EAGLContext setCurrentContext:self.context];
 }
 
+- (void)setupLightSource
+{
+    //initialize the lighting sources
+    //diffusion light at center of sun
+    GLfloat diffuse[] = {1.0, 1.0, 1.0, 1.0};
+    GLfloat position[] = {0,0,0,1};
+    //ambient light so the rest of the planets can be viewed
+    GLfloat ambient[] = {0.9, 0.9, 0.9};
+    
+    glEnable(GL_LIGHTING);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+    glLightfv(GL_LIGHT0, GL_POSITION, position);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
+    
+    glEnable(GL_LIGHT0);
+}
+
 - (void)setupOrthographicView: (CGSize)size
 {
     _size = size;
@@ -195,8 +191,12 @@
     glOrthof(-width, width, -height, height, -2, 2);
 }
 
-#pragma mark - GLKView and GLKViewController delegate methods
+- (void)update
+{
+    [self setupOrthographicView: self.view.bounds.size];
+}
 
+#pragma mark - GLKView and GLKViewController delegate methods
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
     float scaleFactor = 0.1 * [[_zoomValues objectAtIndex:_zoomLvl] doubleValue];
@@ -279,22 +279,7 @@
     }
 }
 
-//updates the model's position, rotation, and texture
-- (void) updateModel:(PlanetModel*) model texture:(ImageTexture*) texture size:(float) size xTrans:(float) xTrans yTrans:(float) yTrans tilt:(float) tilt;
-{
-    [model.getPlanetPosition updateTiltSpeedWithSpeed:tilt];
-    NSArray* nextLocation = [model.getPlanetPosition nextLocationWithScale:[[_zoomValues objectAtIndex:_zoomLvl] doubleValue]];
-    float nextX = [[nextLocation objectAtIndex:0] floatValue];
-    float nextY = [[nextLocation objectAtIndex:1] floatValue];
-    glTranslatef(nextX + xTrans, nextY + yTrans, 0);
-    glScalef(size, size, size);
-    glRotatef(90, 1, 0, 0);
-    glRotatef(360 - [model.getPlanetPosition.nextRotation floatValue], 0, 1, 0);
-    
-    [texture bind];
-    [model drawOpenGLES1];
-}
-
+#pragma mark Touch events
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     
@@ -315,7 +300,6 @@
     _xOffset += (((pos.x/_size.width) * (2 * (2 * _size.width / _min))) - (2 * _size.width / _min)) - _xOffset - _xStart;
     _yOffset += (((pos.y/_size.height) * (2 * (2 * _size.height / _min))) - (2 * _size.height / _min)) - _yOffset - _yStart;
 }
-
 
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
@@ -346,7 +330,27 @@
     }
 }
 
--(void) handlePinch:(UIPinchGestureRecognizer *)gestureRecognizer {
+#pragma mark Shake to reset functions
+
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{
+    if ( event.subtype == UIEventSubtypeMotionShake )
+    {
+        NSLog(@"Hit shake event -> Return to initial settings");
+        _xOffset = 0;
+        _yOffset = 0;
+        _zoomLvl = 3;
+        _trackingPlanet = false;
+        _trackedPosition = [[Position alloc] init];
+    }
+    
+    if ( [super respondsToSelector:@selector(motionEnded:withEvent:)] )
+        [super motionEnded:motion withEvent:event];
+}
+
+#pragma mark Pinch action
+- (void) handlePinch:(UIPinchGestureRecognizer *)gestureRecognizer
+{
     //if pinch has just began set comparitor previous scale
     if ([gestureRecognizer state] == UIGestureRecognizerStateBegan)
     {
@@ -392,16 +396,17 @@
     }
 }
 
-- (void) updateCMDataWithX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z pitch:(double)pitch roll:(double)roll yaw:(double)yaw
+#pragma mark Double tap action
+- (void)doDoubleTap
 {
-    _accX = x;
-    _accY = y;
-    _accZ = z;
-    _rotPitch = pitch;
-    _rotRoll = roll;
-    _rotYaw = yaw;
+    if(_trackingPlanet)
+    {
+        _trackingPlanet = false;
+        _zoomLvl = 3;
+        _trackedPosition = [[Position alloc] init];
+        [self restoreOffsetValues];
+    }
 }
-
 
 #pragma mark Label IO functions
 - (void)updateCurrentTimeLabel
@@ -448,37 +453,7 @@
 
 }
 
-
-#pragma mark Shake to reset functions
-
-- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
-{
-    if ( event.subtype == UIEventSubtypeMotionShake )
-    {
-        NSLog(@"Hit shake event -> Return to initial settings");
-        _xOffset = 0;
-        _yOffset = 0;
-        _zoomLvl = 3;
-        _trackingPlanet = false;
-        _trackedPosition = [[Position alloc] init];
-    }
-    
-    if ( [super respondsToSelector:@selector(motionEnded:withEvent:)] )
-        [super motionEnded:motion withEvent:event];
-}
-
-
-- (void)doDoubleTap
-{
-    if(_trackingPlanet)
-    {
-        _trackingPlanet = false;
-        _zoomLvl = 3;
-        _trackedPosition = [[Position alloc] init];
-        [self restoreOffsetValues];
-    }
-}
-
+#pragma mark Helper functions
 - (BOOL)canBecomeFirstResponder
 {
     return YES;
@@ -501,5 +476,31 @@
     _zoomLvl = _zoomLvlStore;
 }
 
+//updates the model's position, rotation, and texture
+- (void) updateModel:(PlanetModel*) model texture:(ImageTexture*) texture size:(float) size xTrans:(float) xTrans yTrans:(float) yTrans tilt:(float) tilt;
+{
+    [model.getPlanetPosition updateTiltSpeedWithSpeed:tilt];
+    NSArray* nextLocation = [model.getPlanetPosition nextLocationWithScale:[[_zoomValues objectAtIndex:_zoomLvl] doubleValue]];
+    float nextX = [[nextLocation objectAtIndex:0] floatValue];
+    float nextY = [[nextLocation objectAtIndex:1] floatValue];
+    glTranslatef(nextX + xTrans, nextY + yTrans, 0);
+    glScalef(size, size, size);
+    glRotatef(90, 1, 0, 0);
+    glRotatef(360 - [model.getPlanetPosition.nextRotation floatValue], 0, 1, 0);
+    
+    [texture bind];
+    [model drawOpenGLES1];
+}
+
+//gets data from core motion using DeviceMotion class 
+- (void) updateCMDataWithX:(CGFloat)x y:(CGFloat)y z:(CGFloat)z pitch:(double)pitch roll:(double)roll yaw:(double)yaw
+{
+    _accX = x;
+    _accY = y;
+    _accZ = z;
+    _rotPitch = pitch;
+    _rotRoll = roll;
+    _rotYaw = yaw;
+}
 
 @end

@@ -31,6 +31,7 @@
 
 @synthesize motman, timer;
 
+//Add a controller to which motion will be passed too
 - (DeviceMotion*) initWithController:(ViewController *)controller
 {
     self = [super init];
@@ -49,6 +50,7 @@
     
 }
 
+//Called by the view controller to start polling for motion data
 - (void)startMonitoringMotion
 {
     self.motman.accelerometerUpdateInterval = 1.0/kMOTIONUPDATEINTERVAL;
@@ -62,12 +64,14 @@
                                                  repeats:YES];
 }
 
+//Called by the view controller to stop polling mtion data
 - (void)stopMonitoringMotion
 {
     [self.motman stopAccelerometerUpdates];
     [self.motman stopGyroUpdates];
 }
 
+//Actual polling call
 - (void)pollMotion:(NSTimer *)timer
 {
     CMAcceleration acc = self.motman.accelerometerData.acceleration;
@@ -81,6 +85,7 @@
 }
 
 #pragma mark - helpers
+//used to create low pass filter
 - (void)addAcceleration:(CMAcceleration)acc
 {
     float alpha = 0.1;
