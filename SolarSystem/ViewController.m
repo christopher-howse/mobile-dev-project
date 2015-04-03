@@ -76,16 +76,19 @@
 {
     [super viewDidLoad];
     
+    //setup OpenGL context
     self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
     
     if (!self.context) {
         NSLog(@"Failed to create ES context");
     }
     
+    //setup GLKview and context
     GLKView *view = (GLKView *)self.view;
     view.context = self.context;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
     
+    //setup pinch and doubletap gestures for the view
     UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
     [view addGestureRecognizer:pinchGesture];
     
@@ -93,6 +96,7 @@
     doubleTap.numberOfTapsRequired = 2;
     [view addGestureRecognizer:doubleTap];
     
+    //setup OpenGL stuff
     [self setupGL];
 }
 
@@ -130,19 +134,22 @@
     
     [EAGLContext setCurrentContext:self.context];
     
+    //setup zoom values and starting zoom lvl
     _zoomValues = [NSMutableArray arrayWithObjects: @"0.125",@"0.25",@"0.5",@"1",@"2",@"4",@"8", nil];
     _zoomLvl = 3;
     
+    //initalize and start polling core motion values
     _CMData = [[DeviceMotion alloc] initWithController:self];
     [_CMData startMonitoringMotion];
     
-    
+    //initalize start date, tracking, and solar system model
     _starDate = [[StarDate alloc] init];
     
     _trackedPosition = [[Position alloc] init];
     
     _solarSystem = [[SolarSystemModel alloc] init];
     
+    //setup basic OpenGL settings
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glEnable(GL_DEPTH_TEST);
@@ -151,6 +158,7 @@
     glClearColor(0, 0, 0, 0);
     glClearDepthf(1);
     
+    //setup light source of the sun
     [self setupLightSource];
 }
 
@@ -168,6 +176,7 @@
     //ambient light so the rest of the planets can be viewed
     GLfloat ambient[] = {0.9, 0.9, 0.9};
     
+    //enable light source and effects
     glEnable(GL_LIGHTING);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
     glLightfv(GL_LIGHT0, GL_POSITION, position);
